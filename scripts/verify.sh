@@ -60,7 +60,7 @@ if [[ "$CHECK_MODE" == "full" ]]; then
     return "$status"
   }
   trap cleanup EXIT
-  docker compose up -d --build --wait
+  docker compose up -d --build --wait --wait-timeout 180
 
   curl --fail --silent --show-error --retry 30 --retry-connrefused --retry-all-errors --retry-delay 2 --max-time 5 \
     http://127.0.0.1:8000/api/v1/health >/dev/null

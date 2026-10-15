@@ -59,9 +59,13 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "Docker Compose configuration validation failed." }
 
     try {
-      docker compose up -d --build --wait
-      if ($LASTEXITCODE -ne 0) { throw "Docker Compose build/start failed." }
       $StackStarted = $true
+      docker compose up -d --build --wait --wait-timeout 180
+      if ($LASTEXITCODE -ne 0) {
+        docker compose ps
+        docker compose logs --no-color --tail 150
+        throw "Docker Compose build/start/healthcheck failed; see container logs above."
+      }
 
       Wait-NetPulseHttp "http://127.0.0.1:8000/api/v1/health"
       Wait-NetPulseHttp "http://127.0.0.1:3000/api/health"

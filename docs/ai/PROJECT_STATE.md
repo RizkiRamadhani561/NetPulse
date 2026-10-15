@@ -5,7 +5,7 @@ Last updated: 2026-10-16 (WIB)
 ## Current position
 
 - **Phase:** 0 — Foundation
-- **Overall status:** ⚠️ Partial. The repository scaffold, bilingual dashboard shell, API liveness/readiness endpoints, internal lab definitions, original prompt, and dependency lockfiles are committed.
+- **Overall status:** ⚠️ Partial. Repository scaffold, bilingual dashboard shell, API liveness/readiness endpoints, internal lab definitions, original prompt, and dependency lockfiles are committed.
 - **Repository:** `RizkiRamadhani561/NetPulse`, private, default branch `main`.
 - **Release:** no release has been published.
 
@@ -17,7 +17,7 @@ Last updated: 2026-10-16 (WIB)
 - Indonesian and English UI from the MVP.
 - Local Docker Compose is the first deployment target.
 - The user changed repository visibility to private. Keep the repository private; the assistant did not change visibility.
-- Commit/push of foundation and verification fixes is authorized. Other repository settings have not been changed.
+- Commit/push of the foundation and verification fixes is authorized. Other repository settings have not been changed.
 
 ## Current implementation
 
@@ -30,19 +30,18 @@ Last updated: 2026-10-16 (WIB)
 
 ## Verification snapshot
 
-- The pre-container-smoke revision passed backend lint/format/tests, frontend typecheck/build/audit, and secret scanning.
-- On the latest locked CI run, Ruff lint passed; Ruff format requested one final compact formatting change in the structural checker. That change is now applied without weakening the check.
-- API container image built successfully on earlier Docker smoke. A later smoke attempt started the services but a request reset the connection; the web service healthcheck and diagnostic logs are now configured, and the newest smoke result remains to be checked.
+- GitHub Actions backend checks passed after the final structural-check formatting adjustment.
+- On the latest observed run, frontend typecheck/build/audit and secret scanning passed; the default Compose smoke was still running when checked.
+- Docker smoke now uses a web healthcheck, retries transient connection errors, prints service logs on failure, and has a 180-second startup-health timeout to avoid an unbounded wait.
 - Local Docker is unavailable in the preparation environment; Windows validation remains outstanding.
 
 ## Blockers / not verified
 
-1. ❓ The next CI run must confirm Ruff lint/format/backend tests all pass together.
-2. ❓ Default Compose smoke must complete successfully after the web healthcheck and retry changes.
-3. ❓ The isolated lab overlay and SNMP simulator have not been built/run.
-4. ❓ Storybook, browser screenshots, axe/keyboard accessibility checks, and independent code review have not run.
-5. ❓ A clean Windows run of `scripts/verify.ps1 -Mode full` remains pending.
+1. ❓ The current run's Docker Compose smoke result must be checked after it completes.
+2. ❓ The isolated lab overlay and SNMP simulator have not been built/run.
+3. ❓ Storybook, browser screenshots, axe/keyboard accessibility checks, and independent code review have not run.
+4. ❓ A clean Windows run of `scripts/verify.ps1 -Mode full` remains pending.
 
 ## Next safe step
 
-Review the complete CI result after the final formatting adjustment. If the default Compose smoke passes, run quick verification on Windows and validate the default stack and isolated lab before beginning Phase 1.
+Review the full CI result. If default Compose smoke passes, run quick verification on Windows and validate the default stack locally; then test the isolated lab overlay before beginning Phase 1.

@@ -43,3 +43,9 @@
 
 - The locked CI Ruff lint passed, and Ruff format pointed to one remaining multi-line warning in `scripts/verify_project.py`. It has been changed to Ruff's one-line form; the warning text remains short and the check is unchanged.
 - The latest workflow also exercises the web healthcheck and prints container logs if a smoke test fails. Its final result is still pending.
+
+## 2026-10-16 (WIB) — Bounded Docker smoke checks
+
+- Added `--wait-timeout 180` to CI and local full-verification Compose startup commands so an unhealthy service cannot leave verification waiting indefinitely.
+- The PowerShell verifier captures Compose service status and logs if stack startup or healthchecks fail. CI and the Bash verifier also collect recent container logs before cleanup on failure.
+- Latest CI at the time of this entry: backend checks passed; frontend and Gitleaks passed; Docker smoke was still running. Record the definitive Docker result after the current run finishes.
