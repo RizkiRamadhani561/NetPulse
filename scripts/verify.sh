@@ -14,35 +14,60 @@ python scripts/verify_project.py --mode "$CHECK_MODE"
 
 if [[ "$CHECK_MODE" == "full" ]]; then
   missing=0
-  for tool in docker npm; do
+  for tool in docker npm uv gitleaks curl; do
     if ! command -v "$tool" >/dev/null 2>&1; then
       echo "❌ Missing required tool for full verification: $tool"
       missing=1
     fi
   done
-  if ! python -c "import pytest" >/dev/null 2>&1; then
-    echo "❌ Missing Python test dependencies. Install backend dev extras first."
-    missing=1
-  fi
-  if [[ ! -f frontend/package-lock.json ]]; then
-    echo "❌ frontend/package-lock.json is missing; generate and review it before full verification."
-    missing=1
-  fi
-  if [[ ! -f backend/uv.lock ]]; then
-    echo "❌ backend/uv.lock is missing; generate and review it before full verification."
-    missing=1
-  fi
+  for lockfile in backend/uv.lock frontend/package-lock.json; do
+    if [[ ! -f "$lockfile" ]]; then
+      echo "❌ Required lockfile is missing: $lockfile"
+      missing=1
+    fi
+  done
   if [[ "$missing" -ne 0 ]]; then
-    echo "⚠️ Full verification is blocked; quick structural checks are not a substitute for L0–L5 evidence."
+    echo "⚠️ Full verification cannot proceed until the missing tools/files are available."
     exit 2
   fi
+
+  (
+    cd backend
+    uv sync --locked --extra dev
+    uv run --locked --extra dev ruff check app tests ../scripts
+    uv run --locked --extra dev ruff format --check app tests ../scripts
+    uv run --locked --extra dev pytest tests -q
+  )
+
+  (
+    cd frontend
+    npm ci --no-audit --no-fund
+    npm run typecheck
+    npm run build
+    npm audit --audit-level=high
+  )
+
   docker compose config --quiet
-  (cd backend && python -m pytest tests -q)
-  (cd frontend && npm ci && npm run typecheck && npm run build && npm audit --audit-level=high)
-  if command -v gitleaks >/dev/null 2>&1; then
-    gitleaks dir --redact .
-  else
-    echo "❌ Gitleaks CLI is required for full verification." >&2
-    exit 2
-  fi
+  readiness_file="$(mktemp)"
+  cleanup() {
+    docker compose down --remove-orphans
+    rm -f "$readiness_file"
+  }
+  trap cleanup EXIT
+  docker compose up -d --build --wait
+
+  curl --fail --silent --show-error --retry 30 --retry-connrefused --retry-delay 2 --max-time 5 \
+    http://127.0.0.1:8000/api/v1/health >/dev/null
+  curl --fail --silent --show-error --retry 30 --retry-connrefused --retry-delay 2 --max-time 5 \
+    http://127.0.0.1:3000/api/health >/dev/null
+  curl --fail --silent --show-error --retry 30 --retry-connrefused --retry-delay 2 --max-time 5 \
+    http://127.0.0.1:3000/ >/dev/null
+
+  ready_code="$(curl --silent --show-error --output "$readiness_file" --write-out '%{http_code}' --max-time 5 \
+    http://127.0.0.1:8000/api/v1/ready)"
+  test "$ready_code" = "503"
+  python -c 'import json,sys; assert json.load(open(sys.argv[1], encoding="utf-8"))["status"] == "not_ready"' "$readiness_file"
+
+  gitleaks dir --redact .
+  echo "✅ Full local verification passed, including the Docker Compose smoke test."
 fi

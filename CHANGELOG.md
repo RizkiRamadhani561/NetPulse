@@ -4,8 +4,9 @@ All notable changes will be documented here. The project has not released a vers
 
 ## Unreleased — Phase 0 foundation
 
-- Added project safety rules, environment template, Gitleaks pre-commit hook, and MIT license.
-- Added FastAPI liveness/readiness skeleton and Next.js dashboard shell with Indonesian/English labels.
-- Added Docker Compose development setup and an opt-in isolated lab overlay.
-- Added split specifications, AI project memory, basic CI, and verification scripts.
-- Dependency lockfiles and runtime/build verification remain pending because package registries are not reachable in the preparation environment.
+- Added the API health/readiness shell and a bilingual Next.js dashboard with honest empty states.
+- Added Docker Compose development setup and an opt-in internal lab network with synthetic HTTP/SNMP fixtures.
+- Added project scope notes, technical decisions, verification scripts, contributor guidance, and security defaults.
+- Committed resolver-generated backend and frontend dependency lockfiles; CI and Docker builds use locked dependency installs.
+- Added CI checks for backend lint/format/tests, frontend typecheck/build/audit, secret scanning, and a Docker Compose smoke test.
+- Phase 0 is still in progress: Windows/local Docker validation, the lab overlay, Storybook, accessibility review, and an independent code review remain outstanding.

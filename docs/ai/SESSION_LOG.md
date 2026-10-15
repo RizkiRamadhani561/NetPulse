@@ -2,16 +2,17 @@
 
 ## 2026-10-16 (WIB) — Initial GitHub push and Phase 0 foundation
 
-- Checked the remote repository: it was public, on default branch `main`, and initially empty.
-- Created the first README commit, `Add project overview and local setup guide` (`eff1d6663fcbba147f6fcb21609a1af671191b1e`).
-- Prepared the separate Phase 0 foundation commit: environment template and ignore rules, API liveness/readiness skeleton, Next.js dashboard shell, Indonesian/English labels, Docker Compose, isolated lab fixtures, CI workflow, contribution/security notes, project memory, and sectioned feature/UI scope.
-- Kept `.env` and local generated artifacts out of the Git tree. `.env.example` contains blank secret values.
-- Verification evidence from the preparation environment: structure checks reported 0 failures and 2 lockfile warnings; 2 backend tests passed with the host-installed environment. Those results do not prove that the pinned dependencies or complete app build work.
-- Not verified here: Docker Compose build/start, full dependency installation, lockfile generation, TypeScript/Storybook/production build, Gitleaks, GitHub Actions, browser/accessibility checks, or independent review.
-- No repository visibility or security settings were changed. The repository remains public until its owner changes it manually.
+- Checked the remote repository: private repository, default branch `main`, and an initially empty tree. The user changed visibility to private during the process.
+- Added the project overview, a Phase 0 source scaffold, safety defaults, API liveness/readiness endpoints, bilingual Next.js dashboard shell, Docker Compose setup, isolated lab fixtures, basic CI, contribution/security notes, and AI memory/spec files.
+- First CI run revealed two Ruff findings (test import order and one string-suffix condition), a formatter mismatch, and a Gitleaks checkout setup problem. Fixed the import/lint condition and added checkout to the secret-scanning job; formatted `scripts/verify_project.py` without weakening checks.
+- Generated actual dependency lockfiles on GitHub Actions using uv 0.10.0 with Python 3.14.8 and Node 24.22.0/npm. Both `backend/uv.lock` and `frontend/package-lock.json` were committed at [285a8b6](https://github.com/RizkiRamadhani561/NetPulse/commit/285a8b6d3154284c3308e82b80b52f60ae24cbb1).
+- A GitHub Actions run completed successfully for backend checks, frontend typecheck/build/audit, and secret scanning before the next lockfile-enforcement update.
+- Updated CI and verification scripts to consume the lockfiles, use a locked backend install, and include a default Docker Compose smoke test. The smoke job checks API liveness, frontend health/home page, and the documented 503 readiness response.
+- Removed the temporary lockfile resolver workflow after the lockfiles were committed, to avoid leaving a workflow with write access in the repository.
+- Runtime tests on local Docker/Windows, the lab overlay, Storybook, visual/accessibility review, and independent review remain open.
 
 ### Next
 
-- Generate and review `backend/uv.lock` and `frontend/package-lock.json`.
-- Run quick verification on Windows, then validate Docker Compose and the opt-in lab.
+- Inspect the latest Actions run for locked installs, formatting/lint/tests, secret scan, and Docker Compose smoke.
+- Run quick verification on Windows and test the default Compose stack and opt-in internal lab.
 - Fix any findings before marking Phase 0 complete.
