@@ -22,7 +22,7 @@
   "devDependencies": {
     "@storybook/addon-a11y": "10.6.2",
     "@storybook/nextjs-vite": "10.6.2",
-    "@types/node": "^24.0.0",
+    "@types/node": "^26.6.5",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@tailwindcss/postcss": "4.3.3",
