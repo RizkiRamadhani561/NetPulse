@@ -78,15 +78,8 @@ def check() -> int:
         else:
             fail(f"required file missing: {relative}")
 
-    ignore_text = (
-        (ROOT / ".gitignore").read_text(encoding="utf-8")
-        if (ROOT / ".gitignore").exists()
-        else ""
-    )
-    if (
-        re.search(r"(?m)^\.env(?:\*|$|\.)", ignore_text)
-        and "!.env.example" in ignore_text
-    ):
+    ignore_text = (ROOT / ".gitignore").read_text(encoding="utf-8") if (ROOT / ".gitignore").exists() else ""
+    if re.search(r"(?m)^\.env(?:\*|$|\.)", ignore_text) and "!.env.example" in ignore_text:
         ok(".env is ignored and .env.example is explicitly allowed")
     else:
         fail(".gitignore must ignore .env files and allow .env.example")
@@ -97,13 +90,9 @@ def check() -> int:
         missing = sorted(SECRET_NAMES - env_values.keys())
         populated = sorted(name for name in SECRET_NAMES if env_values.get(name, ""))
         if missing:
-            fail(
-                f"secret variable names absent from .env.example: {', '.join(missing)}"
-            )
+            fail(f"secret variable names absent from .env.example: {', '.join(missing)}")
         elif populated:
-            fail(
-                f"secret values must remain blank in .env.example: {', '.join(populated)}"
-            )
+            fail(f"secret values must remain blank in .env.example: {', '.join(populated)}")
         else:
             ok("required secret names exist in .env.example and have blank values")
 
@@ -126,9 +115,7 @@ def check() -> int:
                     (ROOT / "frontend/src/messages/en.json").read_text(encoding="utf-8")
                 )
                 if set(id_values) != set(en_values):
-                    fail(
-                        "Indonesian and English message dictionaries do not have matching keys"
-                    )
+                    fail("Indonesian and English message dictionaries do not have matching keys")
                 else:
                     ok("Indonesian and English message dictionaries have matching keys")
             else:
@@ -141,9 +128,7 @@ def check() -> int:
         try:
             data = tomllib.loads(pyproject.read_text(encoding="utf-8"))
             if data.get("project", {}).get("requires-python") != ">=3.14,<3.15":
-                warn(
-                    "review Python version range against the dependency lock before shipping"
-                )
+                warn("review Python version range against the dependency lock before shipping")
             else:
                 ok("backend pyproject TOML parses")
         except tomllib.TOMLDecodeError as exc:
@@ -169,9 +154,7 @@ def check() -> int:
             ok("design tokens, focus styles, and reduced-motion rule are present")
 
     if not (ROOT / "backend/uv.lock").is_file():
-        warn(
-            "backend/uv.lock not generated; dependency resolution is not reproducible yet"
-        )
+        warn("backend/uv.lock not generated; dependency resolution is not reproducible yet")
     if not (ROOT / "frontend/package-lock.json").is_file():
         warn(
 "frontend/package-lock.json not generated; locked installs are not ready yet"

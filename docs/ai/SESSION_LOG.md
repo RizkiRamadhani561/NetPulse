@@ -25,3 +25,9 @@
 - The initial smoke attempt successfully built the API image from the locked Python graph. The frontend image build hit npm registry `ECONNRESET` during `npm ci`; this is recorded as an open blocker while retry settings are added.
 - Ruff found a single E501 line in `scripts/verify_project.py`; the message was shortened without changing the check.
 - Still not verified: successful container smoke after the retry change, Windows Docker Desktop startup, the isolated lab overlay, Storybook, UI accessibility checks, and independent review.
+
+## 2026-10-16 (WIB) — Formatting and container retry follow-up
+
+- Ruff lint passed with the locked dependency environment. The formatter then reported multiple style differences in `scripts/verify_project.py`; these are being aligned with the installed Ruff formatter rather than relaxing the check.
+- The Docker smoke built the API image successfully, but frontend dependency download failed with npm registry `ECONNRESET`. Added five retries with increasing backoff/timeouts to both frontend Docker stages. The retry's effect remains to be confirmed by CI.
+- The project status and blocker log now distinguish the confirmed API image build from the still-failing web image build.
