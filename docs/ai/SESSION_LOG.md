@@ -62,3 +62,10 @@
 - The structural checker now requires both Next.js development and production generated-type include patterns in `frontend/tsconfig.json`, matching the startup failure evidence.
 - The next CI run flagged one Ruff formatting preference in the new check; adjusted the conditional assignment to Ruff's canonical form without changing its behavior.
 - Runtime fix remains pending until Docker Compose smoke succeeds.
+
+## 2026-10-16 (WIB) — Complete Next.js 16.4 TypeScript defaults
+
+- The first config correction preconfigured both generated type include patterns, but source review of the exact Next.js v16.4.0 implementation showed that jsx=preserve is also rewritten: v16.4.0 requires jsx=react-jsx.
+- Changed the JSX runtime to react-jsx and extended the structural regression check to require it plus both .next/types/**/*.ts and .next/dev/types/**/*.ts.
+- Reference: https://github.com/vercel/next.js/blob/v16.4.0/packages/next/src/lib/typescript/writeConfigurationDefaults.ts
+- The new commit triggers another CI run. BUG-004 remains open until Docker Compose smoke confirms the web container becomes healthy and the HTTP checks pass.

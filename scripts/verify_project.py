@@ -109,6 +109,18 @@ def check() -> int:
         try:
             parsed_json = json.loads(path.read_text(encoding="utf-8"))
             if rel == "frontend/tsconfig.json":
+                if isinstance(parsed_json, dict):
+                    compiler_options = parsed_json.get("compilerOptions", {})
+                else:
+                    compiler_options = {}
+                if (
+                    not isinstance(compiler_options, dict)
+                    or compiler_options.get("jsx") != "react-jsx"
+                ):
+                    fail("frontend/tsconfig.json must set compilerOptions.jsx to react-jsx")
+                else:
+                    ok("Next.js automatic JSX runtime is preconfigured")
+
                 includes = parsed_json.get("include", []) if isinstance(parsed_json, dict) else []
                 required_type_paths = (
                     ".next/types/**/*.ts",
