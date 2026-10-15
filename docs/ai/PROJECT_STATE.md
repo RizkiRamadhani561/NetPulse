@@ -5,9 +5,9 @@ Last updated: 2026-10-16 (WIB)
 ## Current position
 
 - **Phase:** 0 — Foundation
-- **Overall status:** ⚠️ Partial. The initial repository overview is committed; the Phase 0 source scaffold is being added in a separate commit.
-- **Repository:** `RizkiRamadhani561/NetPulse` (public at the time of this push; default branch `main`).
-- **Current task:** publish the foundation and verify the remote tree.
+- **Overall status:** ⚠️ Partial. The initial overview and source scaffold are committed; full runtime and build verification remain outstanding.
+- **Repository:** `RizkiRamadhani561/NetPulse`, default branch `main`.
+- **Foundation commit:** [`a01f6ea`](https://github.com/RizkiRamadhani561/NetPulse/commit/a01f6ea572d3560427cfd9d84336e7881102eed8).
 - **Release:** no release has been published.
 
 ## User-confirmed constraints
@@ -18,8 +18,8 @@ Last updated: 2026-10-16 (WIB)
 - Support home labs and authorized office/school networks.
 - Indonesian and English UI from the MVP.
 - Local Docker Compose is the first deployment target.
-- Repository visibility remains public for now; the owner may change it later.
-- Commit and push were explicitly authorized for the initial foundation. Repository security settings have not been changed.
+- The user asked to postpone the repository privacy step. The initial metadata check reported public; the final metadata checks reported private. No visibility setting was changed by the assistant, so the owner should confirm the status in GitHub.
+- Commit and push of the initial foundation were explicitly authorized. No other repository settings were changed.
 
 ## Current implementation
 
@@ -27,12 +27,13 @@ Last updated: 2026-10-16 (WIB)
 - Frontend: dashboard shell and ID/EN labels; monitoring values remain empty placeholders rather than synthetic uptime/latency.
 - Secrets: `.env` is ignored; `.env.example` contains variable names with blank values.
 - Lab: opt-in internal Docker network and synthetic fixtures are scaffolded; the lab runtime is not yet verified.
-- Scope and implementation notes are organized under `docs/spec/` and `docs/ai/`. Per-feature acceptance criteria still need to be expanded as features are implemented.
+- Scope and implementation notes are organized under `docs/spec/` and `docs/ai/`. These are working references; per-feature acceptance criteria still need to be expanded as features are implemented.
 
 ## Verification snapshot
 
 - Structural checks on the prepared package: 0 failures, 2 warnings (missing dependency lockfiles).
 - Backend tests: 2 passed against the already-installed host environment. The pinned dependency graph was not installed.
+- Remote verification: GitHub file reads confirmed the README, API entry point, dashboard shell, scope notes, and environment safeguards are present on `main`.
 - Docker Compose build/start, browser checks, full dependency installation, Storybook, Gitleaks, and GitHub Actions remain unverified in the preparation environment.
 
 ## Blockers / not verified
