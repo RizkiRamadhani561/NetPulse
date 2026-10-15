@@ -49,3 +49,10 @@
 - Added `--wait-timeout 180` to CI and local full-verification Compose startup commands so an unhealthy service cannot leave verification waiting indefinitely.
 - The PowerShell verifier captures Compose service status and logs if stack startup or healthchecks fail. CI and the Bash verifier also collect recent container logs before cleanup on failure.
 - Latest CI at the time of this entry: backend checks passed; frontend and Gitleaks passed; Docker smoke was still running. Record the definitive Docker result after the current run finishes.
+
+## 2026-10-16 (WIB) — Fix Compose web startup permissions
+
+- Investigated failed GitHub Actions run [38801005332](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38801005332). Both API and web images built; API health was healthy; frontend health never passed.
+- Container logs showed `EACCES: permission denied, open '/app/tsconfig.json'` from Next.js 16.4. The development container runs as non-root `node` and the source tree is bind-mounted; the config lacked the `.next/dev/types/**/*.ts` include which Next.js uses for its isolated development build.
+- Added both `.next/types/**/*.ts` and `.next/dev/types/**/*.ts` as explicit required entries in the frontend TypeScript configuration. Added a structural regression check so future changes cannot omit either path unnoticed.
+- Updated BUGS/PROJECT_STATE to record the exact failure and the planned retest. The fix is not marked resolved until the next Docker smoke test passes.

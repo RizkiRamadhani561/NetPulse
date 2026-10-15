@@ -107,7 +107,29 @@ def check() -> int:
         if not path.exists():
             continue
         try:
-            json.loads(path.read_text(encoding="utf-8"))
+            parsed_json = json.loads(path.read_text(encoding="utf-8"))
+            if rel == "frontend/tsconfig.json":
+                includes = (
+                    parsed_json.get("include", [])
+                    if isinstance(parsed_json, dict)
+                    else []
+                )
+                required_type_paths = (
+                    ".next/types/**/*.ts",
+                    ".next/dev/types/**/*.ts",
+                )
+                missing_type_paths = (
+                    [pattern for pattern in required_type_paths if pattern not in includes]
+                    if isinstance(includes, list)
+                    else list(required_type_paths)
+                )
+                if missing_type_paths:
+                    fail(
+                        "frontend/tsconfig.json must preconfigure Next.js generated type paths: "
+                        + ", ".join(missing_type_paths)
+                    )
+                else:
+                    ok("Next.js development and production type paths are preconfigured")
             if rel.endswith(("id.json", "en.json")):
                 id_values = json.loads(
                     (ROOT / "frontend/src/messages/id.json").read_text(encoding="utf-8")
