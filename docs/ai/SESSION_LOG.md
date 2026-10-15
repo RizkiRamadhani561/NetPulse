@@ -56,3 +56,9 @@
 - Container logs showed `EACCES: permission denied, open '/app/tsconfig.json'` from Next.js 16.4. The development container runs as non-root `node` and the source tree is bind-mounted; the config lacked the `.next/dev/types/**/*.ts` include which Next.js uses for its isolated development build.
 - Added both `.next/types/**/*.ts` and `.next/dev/types/**/*.ts` as explicit required entries in the frontend TypeScript configuration. Added a structural regression check so future changes cannot omit either path unnoticed.
 - Updated BUGS/PROJECT_STATE to record the exact failure and the planned retest. The fix is not marked resolved until the next Docker smoke test passes.
+
+## 2026-10-16 (WIB) — Checker formatting follow-up
+
+- The structural checker now requires both Next.js development and production generated-type include patterns in `frontend/tsconfig.json`, matching the startup failure evidence.
+- The next CI run flagged one Ruff formatting preference in the new check; adjusted the conditional assignment to Ruff's canonical form without changing its behavior.
+- Runtime fix remains pending until Docker Compose smoke succeeds.

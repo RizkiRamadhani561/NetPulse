@@ -109,11 +109,7 @@ def check() -> int:
         try:
             parsed_json = json.loads(path.read_text(encoding="utf-8"))
             if rel == "frontend/tsconfig.json":
-                includes = (
-                    parsed_json.get("include", [])
-                    if isinstance(parsed_json, dict)
-                    else []
-                )
+                includes = parsed_json.get("include", []) if isinstance(parsed_json, dict) else []
                 required_type_paths = (
                     ".next/types/**/*.ts",
                     ".next/dev/types/**/*.ts",
