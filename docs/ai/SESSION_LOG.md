@@ -31,3 +31,10 @@
 - Ruff lint passed with the locked dependency environment. The formatter then reported multiple style differences in `scripts/verify_project.py`; these are being aligned with the installed Ruff formatter rather than relaxing the check.
 - The Docker smoke built the API image successfully, but frontend dependency download failed with npm registry `ECONNRESET`. Added five retries with increasing backoff/timeouts to both frontend Docker stages. The retry's effect remains to be confirmed by CI.
 - The project status and blocker log now distinguish the confirmed API image build from the still-failing web image build.
+
+## 2026-10-16 (WIB) — Compose readiness and smoke diagnostics
+
+- Ruff lint in the latest attempt identified that the conditional `.gitignore` read needed a short intermediate path variable to satisfy the 100-character rule. The checker logic itself was not relaxed.
+- A container smoke run built the API image and started the services, but a smoke request ended with curl error 56 (connection reset by peer). The Compose `web` service had no healthcheck, so `docker compose up --wait` could treat it as ready before Next.js was accepting requests.
+- Added a `web` HTTP healthcheck, connection-reset retries in the Linux smoke script, and container logs on smoke failure. The PowerShell verifier now retries endpoint checks with its own loop for older Windows curl builds.
+- These changes are awaiting a new CI result.

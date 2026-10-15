@@ -5,9 +5,9 @@ Last updated: 2026-10-16 (WIB)
 ## Current position
 
 - **Phase:** 0 — Foundation
-- **Overall status:** ⚠️ Partial. Repository scaffold, bilingual dashboard shell, API liveness/readiness endpoints, lab definitions, locked dependency files, and CI improvements are committed. Full Phase 0 verification remains open.
+- **Overall status:** ⚠️ Partial. Repository scaffold, bilingual dashboard shell, API liveness/readiness endpoints, internal lab definitions, original prompt, and locked dependency files are committed. Full Phase 0 verification remains open.
 - **Repository:** `RizkiRamadhani561/NetPulse`, private, default branch `main`.
-- **Latest tracked checkpoint:** [`685d1c9`](https://github.com/RizkiRamadhani561/NetPulse/commit/685d1c9bd313cec95e755ea4979d06a32f797571) — retry configuration for transient npm download failures.
+- **Latest tracked checkpoint:** [`5938092`](https://github.com/RizkiRamadhani561/NetPulse/commit/59380926a4b43f60b64da4d2b866df25c6ef6fd8) — verification formatting adjustment.
 - **Release:** no release has been published.
 
 ## User-confirmed constraints
@@ -31,19 +31,19 @@ Last updated: 2026-10-16 (WIB)
 
 ## Verification snapshot
 
-- GitHub Actions passed backend lint/format/tests, frontend typecheck/build/audit, and secret scanning on the pre-container-smoke revision.
-- The latest locked CI run passed Ruff lint after the string-length fix; its format check then reported remaining formatting differences in `scripts/verify_project.py`. The formatter-only change is the current follow-up.
-- Default Docker smoke built the API image from the locked runtime graph. The first frontend image build failed while downloading npm packages due to registry `ECONNRESET`; retries were added to the Dockerfile and the next smoke run has not yet been reviewed.
+- The prior locked CI run passed backend lint/format/tests, frontend typecheck/build/audit, and secret scanning before the Docker smoke job was added.
+- Ruff lint passed on the latest attempt; another Ruff lint line-length issue was fixed in the follow-up. Ruff format still needs a green result for the current head.
+- The API image built successfully. One container smoke attempt failed on an npm registry reset; a later attempt started the services but a smoke request received connection reset while the web container had no healthcheck. A web readiness healthcheck and richer failure logs have been added.
 - Local Docker is unavailable in the preparation environment; Windows validation remains outstanding.
 
 ## Blockers / not verified
 
-1. ❓ Ruff format check must pass on the latest source after the final formatting adjustment.
-2. ❓ The Docker Compose smoke after npm retry settings must complete successfully.
+1. ❓ The next CI run must confirm Ruff lint/format/tests pass with the latest source.
+2. ❓ The next Docker Compose smoke run must verify the web healthcheck and recover from transient startup/network errors.
 3. ❓ The Docker lab overlay and SNMP simulator have not been built/run.
 4. ❓ Storybook, browser screenshots, axe/keyboard accessibility checks, and independent code review have not run.
 5. ❓ A clean Windows run of `scripts/verify.ps1 -Mode full` remains pending.
 
 ## Next safe step
 
-Review CI after the script formatting adjustment and npm retry changes. If the default Compose smoke passes, run quick verification on Windows and confirm the stack locally; then test the isolated lab overlay before beginning Phase 1.
+Review the complete CI result. If the default Compose smoke passes, run the quick verification on Windows and check the default stack locally; then test the isolated lab overlay before beginning Phase 1.

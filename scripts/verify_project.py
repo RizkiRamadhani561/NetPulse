@@ -78,7 +78,8 @@ def check() -> int:
         else:
             fail(f"required file missing: {relative}")
 
-    ignore_text = (ROOT / ".gitignore").read_text(encoding="utf-8") if (ROOT / ".gitignore").exists() else ""
+    gitignore_path = ROOT / ".gitignore"
+    ignore_text = gitignore_path.read_text(encoding="utf-8") if gitignore_path.exists() else ""
     if re.search(r"(?m)^\.env(?:\*|$|\.)", ignore_text) and "!.env.example" in ignore_text:
         ok(".env is ignored and .env.example is explicitly allowed")
     else:
