@@ -1,0 +1,33 @@
+{
+  "name": "netpulse-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "NetPulse web dashboard shell",
+  "engines": {
+    "node": ">=24.22.0 <25"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "next": "16.4.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "10.6.2",
+    "@storybook/nextjs-vite": "10.6.2",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@tailwindcss/postcss": "4.3.3",
+    "storybook": "10.6.2",
+    "tailwindcss": "4.3.3",
+    "typescript": ">=5.9.0 <7.0.0"
+  }
+}

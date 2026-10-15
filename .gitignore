@@ -1,0 +1,59 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+secrets/
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+.python-version.local
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+storybook-static/
+playwright-report/
+test-results/
+coverage/
+.npm/
+
+# Databases, local data, and backups
+*.db
+*.sqlite
+*.sqlite3
+*.db-*
+data/
+backups/
+*.bak
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Local reports/artifacts; keep placeholders and tracked reports
+artifacts/
+docs/ai/verification/**
+!docs/ai/verification/README.md

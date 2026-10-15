@@ -1,0 +1,41 @@
+# Opt-in network lab overlay. The lab network is internal and is not published to the host.
+# Start with: docker compose -f docker-compose.yml -f docker-compose.lab.yml --profile lab up --build
+services:
+  api:
+    networks:
+      - default
+      - lab_internal
+
+  lab-http:
+    profiles: [lab]
+    build:
+      context: ./lab/http
+      dockerfile: Dockerfile
+    networks:
+      - lab_internal
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  snmp-simulator:
+    profiles: [lab]
+    build:
+      context: ./lab
+      dockerfile: snmp/Dockerfile
+    networks:
+      - lab_internal
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+networks:
+  lab_internal:
+    internal: true

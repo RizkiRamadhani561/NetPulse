@@ -10,11 +10,11 @@ NetPulse is an early-stage, self-hosted network-monitoring dashboard for home la
 
 - **API:** Python 3.14, FastAPI, and Uvicorn
 - **Data:** SQLite (WAL), SQLAlchemy, and Alembic; PostgreSQL may be added as an optional profile later
-- **Web:** Next.js App Router, TypeScript, React, Tailwind CSS, and Storybook
+- **Web:** Next.js App Router, TypeScript, React, and Tailwind CSS
 - **Run locally:** Docker Compose, with a separate network lab overlay
-- **Checks:** pytest, Ruff, TypeScript checks, Playwright, Gitleaks, and dependency audits
+- **Checks:** pytest, Ruff, TypeScript checks, Storybook, Gitleaks, and dependency audits
 
-Research notes and design decisions live in `docs/ai/`. The dependency lockfiles have not been generated yet, so a reproducible install is not claimed at this stage.
+Feature scope, UX notes, architecture decisions, and the project log live under docs/spec and docs/ai. Feature requirements will be made testable in docs/ai/TRACEABILITY.md before implementation.
 
 ## Run the preview
 
@@ -29,13 +29,13 @@ docker compose up --build
 
 Then open [http://localhost:3000](http://localhost:3000). The API health endpoint is [http://localhost:8000/api/v1/health](http://localhost:8000/api/v1/health).
 
-To stop the containers, press `Ctrl+C` and run:
+To stop the containers, press Ctrl+C and run:
 
 ```powershell
 docker compose down
 ```
 
-The ports bind to `127.0.0.1` by default, so the preview is not exposed to your LAN. The lab overlay is not enabled by the default command; read `lab/README.md` before starting it.
+The ports bind to 127.0.0.1 by default, so the preview is not exposed to your LAN. The lab overlay is not enabled by the default command; read [lab/README.md](lab/README.md) before starting it.
 
 ## Verify locally
 
@@ -66,11 +66,9 @@ The quick check covers key files and basic configuration. Full verification need
 | 4 | Integrations, demo content, backup and restore | Planned |
 | 5 | Hardening and v1.0.0 release preparation | Planned |
 
-The broader roadmap is in `PROMPT.md` and `docs/spec/`.
-
 ## Security
 
-No telemetry is planned. Keep `.env`, database files, backups, router credentials, SNMP credentials, and tokens out of Git. Read `SECURITY.md` before reporting a vulnerability. Network scanning is intended for networks you own or have permission to test, with private networks as the default scope.
+No telemetry is planned. Keep .env files, database files, backups, router credentials, SNMP credentials, and tokens out of Git. Read [SECURITY.md](SECURITY.md) before reporting a vulnerability. Network scanning is intended for networks you own or have permission to test, with private networks as the default scope.
 
 ## Language and contribution
 

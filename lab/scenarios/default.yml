@@ -1,0 +1,15 @@
+name: default-lab
+purpose: Verify that the lab hosts can be started without reaching real networks.
+targets:
+  - name: lab-http
+    protocol: http
+    address: http://lab-http:8080/health
+    expected_status: 200
+    executable: false
+  - name: snmp-simulator
+    protocol: snmp
+    address: snmp-simulator:1161/udp
+    executable: false
+notes:
+  - This file is a specification fixture; scenario execution is not implemented in Phase 0.
+  - All lab services stay on Docker internal-only lab network.
