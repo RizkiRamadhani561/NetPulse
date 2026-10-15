@@ -62,11 +62,11 @@ if [[ "$CHECK_MODE" == "full" ]]; then
   trap cleanup EXIT
   docker compose up -d --build --wait --wait-timeout 180
 
-  curl --fail --silent --show-error --retry 30 --retry-connrefused --retry-all-errors --retry-delay 2 --max-time 5 \
+  curl --fail --silent --show-error --retry 5 --retry-connrefused --retry-all-errors --retry-delay 2 --max-time 5 \
     http://127.0.0.1:8000/api/v1/health >/dev/null
-  curl --fail --silent --show-error --retry 30 --retry-connrefused --retry-all-errors --retry-delay 2 --max-time 5 \
+  curl --fail --silent --show-error --retry 5 --retry-connrefused --retry-all-errors --retry-delay 2 --max-time 5 \
     http://127.0.0.1:3000/api/health >/dev/null
-  curl --fail --silent --show-error --retry 30 --retry-connrefused --retry-all-errors --retry-delay 2 --max-time 5 \
+  curl --fail --silent --show-error --retry 5 --retry-connrefused --retry-all-errors --retry-delay 2 --max-time 5 \
     http://127.0.0.1:3000/ >/dev/null
 
   ready_code="$(curl --silent --show-error --output "$readiness_file" --write-out '%{http_code}' --max-time 5 \

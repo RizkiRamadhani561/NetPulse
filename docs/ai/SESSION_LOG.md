@@ -69,3 +69,9 @@
 - Changed the JSX runtime to react-jsx and extended the structural regression check to require it plus both .next/types/**/*.ts and .next/dev/types/**/*.ts.
 - Reference: https://github.com/vercel/next.js/blob/v16.4.0/packages/next/src/lib/typescript/writeConfigurationDefaults.ts
 - The new commit triggers another CI run. BUG-004 remains open until Docker Compose smoke confirms the web container becomes healthy and the HTTP checks pass.
+
+## 2026-10-16 (WIB) — Bound smoke-test retries
+
+- The latest run after preconfiguring Next.js 16.4 defaults had passed backend checks, frontend checks, and secret scanning; Docker Compose smoke still had no final result at the last check.
+- Reduced the Linux smoke and Bash full-verification HTTP retry count from 30 to 5. Compose now waits for the API/web healthchecks before those requests, so 30 retries per endpoint were excessive and delayed actionable failure logs.
+- Healthchecks, API liveness, frontend health/home requests, and the expected 503 readiness response remain required. This is only a retry bound, not a skipped assertion.

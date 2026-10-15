@@ -5,9 +5,10 @@ Last updated: 2026-10-16 (WIB)
 ## Current position
 
 - **Phase:** 0 — Foundation
-- **Overall status:** ⚠️ Partial. Core scaffold and locked dependencies are committed. Backend checks pass; the Docker Compose web-startup permission failure is being addressed by preconfiguring the required Next.js 16.4 TypeScript defaults.
+- **Overall status:** ⚠️ Partial. Core scaffold and locked dependencies are committed. Backend checks, frontend typecheck/build/audit, and secret scanning pass on the latest revision; the Docker Compose smoke test remains in progress.
 - **Repository:** RizkiRamadhani561/NetPulse, private, default branch main.
-- **Current issue:** the previous Docker smoke failed with EACCES on /app/tsconfig.json while Next.js attempted to rewrite its TypeScript config.
+- **Current issue:** the earlier Docker smoke failed with EACCES on /app/tsconfig.json; the latest fix preconfigures the required Next.js 16.4 TypeScript settings, but it is not resolved until the smoke job passes.
+- **Latest verification run:** https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38802836821
 - **Release:** no release has been published.
 
 ## User-confirmed constraints
@@ -28,22 +29,21 @@ Last updated: 2026-10-16 (WIB)
 - Dependency resolution: backend/uv.lock and frontend/package-lock.json are committed and used by CI/Docker.
 - Original master specification is stored at PROMPT.md; working references are under docs/spec/.
 - Lab: opt-in internal Docker network and synthetic fixtures are scaffolded; runtime validation remains pending.
-- Next.js 16.4 config now sets jsx=react-jsx and preconfigures both development and production generated type include paths.
+- Next.js 16.4 config sets jsx=react-jsx and preconfigures both development and production generated type include paths.
 
 ## Verification snapshot
 
-- Backend lint, format, tests, and structural checks passed after the first include-path patch's formatter correction.
-- Frontend typecheck/build/audit and secret scanning passed on that revision.
-- The Docker smoke job for that revision had not completed when checked. Review of the exact Next.js v16.4.0 source showed the config also requires jsx=react-jsx; both that and the development type path are now set explicitly.
+- Latest run passed structural checks, Ruff lint/format, backend tests, frontend typecheck, production build, dependency audit, and secret scanning.
+- Docker Compose smoke has not returned a final result yet. The HTTP smoke retries are now bounded to five attempts per endpoint; the Docker healthcheck and endpoint/readiness assertions remain required.
 - Windows Docker Desktop and the isolated lab overlay remain unverified locally.
 
 ## Blockers / not verified
 
-1. ❓ CI must verify that preconfigured Next.js defaults prevent tsconfig writes and allow Docker Compose smoke to pass.
+1. ❓ CI must confirm Next.js starts without writing tsconfig and that Docker Compose smoke endpoints pass.
 2. ❓ The isolated lab overlay and SNMP simulator have not been built/run.
 3. ❓ Storybook, browser screenshots, axe/keyboard accessibility checks, and independent code review have not run.
 4. ❓ A clean Windows run of scripts/verify.ps1 -Mode full remains pending.
 
 ## Next safe step
 
-Review CI after the complete Next.js TypeScript config fix. If Docker Compose smoke passes, repeat the default stack on Windows and test the isolated lab overlay before beginning Phase 1.
+Review the latest CI run. If Docker Compose smoke passes, repeat the default stack on Windows and test the isolated lab overlay before beginning Phase 1.
