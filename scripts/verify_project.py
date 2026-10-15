@@ -83,7 +83,7 @@ def check() -> int:
             continue
         try:
             json.loads(path.read_text(encoding="utf-8"))
-            if rel.endswith("id.json") or rel.endswith("en.json"):
+            if rel.endswith(("id.json", "en.json")):
                 id_values = json.loads((ROOT / "frontend/src/messages/id.json").read_text(encoding="utf-8"))
                 en_values = json.loads((ROOT / "frontend/src/messages/en.json").read_text(encoding="utf-8"))
                 if set(id_values) != set(en_values):

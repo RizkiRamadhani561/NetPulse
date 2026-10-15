@@ -41,7 +41,8 @@ jobs:
         run: ruff format --check backend/app backend/tests scripts
 
       - name: Backend tests
-        run: python -m pytest backend/tests -q
+        working-directory: backend
+        run: python -m pytest tests -q
 
   frontend:
     name: Frontend typecheck, build, and audit
@@ -75,6 +76,9 @@ jobs:
     name: Secret scanning
     runs-on: ubuntu-latest
     steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
       - name: Scan for secrets
         uses: gitleaks/gitleaks-action@v3
         env:

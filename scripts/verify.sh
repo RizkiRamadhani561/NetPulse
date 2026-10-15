@@ -37,7 +37,7 @@ if [[ "$CHECK_MODE" == "full" ]]; then
     exit 2
   fi
   docker compose config --quiet
-  python -m pytest backend/tests -q
+  (cd backend && python -m pytest tests -q)
   (cd frontend && npm ci && npm run typecheck && npm run build && npm audit --audit-level=high)
   if command -v gitleaks >/dev/null 2>&1; then
     gitleaks dir --redact .
