@@ -157,9 +157,7 @@ def check() -> int:
     if not (ROOT / "backend/uv.lock").is_file():
         warn("backend/uv.lock not generated; dependency resolution is not reproducible yet")
     if not (ROOT / "frontend/package-lock.json").is_file():
-        warn(
-"frontend/package-lock.json not generated; locked installs are not ready yet"
-        )
+        warn("frontend/package-lock.json not generated; locked installs are not ready yet")
 
     print("\nFoundation check summary")
     print(f"  failures: {failures}")

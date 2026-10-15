@@ -38,3 +38,8 @@
 - A container smoke run built the API image and started the services, but a smoke request ended with curl error 56 (connection reset by peer). The Compose `web` service had no healthcheck, so `docker compose up --wait` could treat it as ready before Next.js was accepting requests.
 - Added a `web` HTTP healthcheck, connection-reset retries in the Linux smoke script, and container logs on smoke failure. The PowerShell verifier now retries endpoint checks with its own loop for older Windows curl builds.
 - These changes are awaiting a new CI result.
+
+## 2026-10-16 (WIB) — Final structural-check formatting fix
+
+- The locked CI Ruff lint passed, and Ruff format pointed to one remaining multi-line warning in `scripts/verify_project.py`. It has been changed to Ruff's one-line form; the warning text remains short and the check is unchanged.
+- The latest workflow also exercises the web healthcheck and prints container logs if a smoke test fails. Its final result is still pending.
