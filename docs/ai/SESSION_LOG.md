@@ -16,3 +16,12 @@
 - Inspect the latest Actions run for locked installs, formatting/lint/tests, secret scan, and Docker Compose smoke.
 - Run quick verification on Windows and test the default Compose stack and opt-in internal lab.
 - Fix any findings before marking Phase 0 complete.
+
+## 2026-10-16 (WIB) — Locked Docker installs and smoke-test follow-up
+
+- The repository now includes the original master specification at `PROMPT.md`; the source was read from the user-provided v2 prompt attachment.
+- GitHub Actions resolved `backend/uv.lock` and `frontend/package-lock.json`, and the lockfiles are tracked in `main`. The temporary lockfile resolver workflow was removed.
+- CI was changed to use `uv sync --locked`, `uv run --locked`, and `npm ci`, and a default Docker Compose smoke job was added.
+- The initial smoke attempt successfully built the API image from the locked Python graph. The frontend image build hit npm registry `ECONNRESET` during `npm ci`; this is recorded as an open blocker while retry settings are added.
+- Ruff found a single E501 line in `scripts/verify_project.py`; the message was shortened without changing the check.
+- Still not verified: successful container smoke after the retry change, Windows Docker Desktop startup, the isolated lab overlay, Storybook, UI accessibility checks, and independent review.

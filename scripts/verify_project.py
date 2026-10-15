@@ -174,7 +174,7 @@ def check() -> int:
         )
     if not (ROOT / "frontend/package-lock.json").is_file():
         warn(
-            "frontend/package-lock.json not generated; dependency resolution is not reproducible yet"
+"frontend/package-lock.json not generated; locked installs are not ready yet"
         )
 
     print("\nFoundation check summary")
