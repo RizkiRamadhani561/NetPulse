@@ -59,3 +59,11 @@ The foundation implementation and automated non-container checks are complete. A
 ## Next step
 
 Present the Phase 0 report for review and wait for approval before beginning Phase 1. Keep all deferred runtime/UI/review gates visible in the project state.
+
+## Confirmed future product direction — 2026-10-16
+
+- The owner selected a **hybrid deployment**: central dashboard/API with local or remote probes, preferably using outbound authenticated connections from probes.
+- The owner wants both **Learning Mode** and **Professional Mode** as separate experiences with shared authorization and safety controls.
+- A proposal-only specification was added at docs/spec/19-network-workbench-proposal.md and indexed in docs/spec/INDEX.md. It describes the Network Workbench concept, structured tool runner, optional isolated interactive shell, candidate networking/security tools, packet analysis, lab learning scenarios, and safety boundaries.
+- This is documentation/planning only. No application code or dependencies were changed as part of this direction-setting task.
+- The proposal is not an implementation authorization and does not change official phase priorities, Phase 0 status, the Docker/isolated-lab deferral, or the requirement to wait for owner approval before beginning Phase 1.
