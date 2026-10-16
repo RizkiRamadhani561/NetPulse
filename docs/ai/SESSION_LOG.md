@@ -112,3 +112,8 @@
 - Pytest showed a Starlette deprecation warning caused by importing `fastapi.testclient.TestClient` with the current `httpx` extra. The official Starlette docs now prefer `httpx2` for that wrapper.
 - Replaced the tiny health checks with `httpx.AsyncClient` + `ASGITransport`, requiring no additional dependency; pytest warnings are configured as errors. This should remove the warning rather than suppress it. CI must verify the change.
 - Clarified in both READMEs that Compose runtime validation is deferred and has not been passed yet.
+
+## 2026-10-16 (WIB) — Pin GitHub Actions by commit
+
+- Pinned `actions/checkout`, `actions/setup-python`, `actions/setup-node`, and `gitleaks/gitleaks-action` to the exact full commit SHAs reported by the successful CI run [38851350669](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851350669).
+- The purpose is reproducible workflow inputs, not a change to runtime behavior. The new commit must run through CI again before the SHA-pinned state is called verified.

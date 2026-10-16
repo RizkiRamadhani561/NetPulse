@@ -99,3 +99,8 @@ Sources: [Uptime Kuma](https://github.com/louislam/uptime-kuma), [LibreNMS dashb
 - **Finding:** Starlette documents that its TestClient now uses `httpx2`; the plain `httpx` backing is still supported but deprecated.
 - **Action:** Phase 0 health tests use `httpx.AsyncClient` with `httpx.ASGITransport` rather than importing the deprecated TestClient. Pytest treats warnings as errors so new deprecations are visible in CI.
 - **Trade-off:** These tests exercise the ASGI HTTP contract, but do not test lifespan hooks. That is acceptable for the current health endpoints; lifespan-managed services and database startup tests belong to later phases.
+
+## 12. Pinning CI actions — 2026-10-16
+
+- The successful workflow run [38851350669](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851350669) reported these resolved action commits: checkout `d23441a48e516b6c34aea4fa41551a30e30af803`, setup-python `ece7cb06caefa5fff74198d8649806c4678c61a1`, setup-node `249970729cb0ef3589644e2896645e5dc5ba9c38`, and Gitleaks Action `e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e`.
+- **Decision:** pin these workflow references to their full commit SHAs to avoid mutable action tags. CI must rerun after this change; revisit pins during controlled dependency updates.
