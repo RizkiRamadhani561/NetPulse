@@ -52,7 +52,8 @@ class VerificationRunner:
     def run_step(
         self, name: str, command: list[str], cwd: Path = ROOT
     ) -> bool:
-        log_file = self.report_dir / f"{len(self.rows) + 1:02d}-{name.lower().replace(' ', '-')}.log"
+        step_slug = name.lower().replace(" ", "-")
+        log_file = self.report_dir / f"{len(self.rows) + 1:02d}-{step_slug}.log"
         relative_log = log_file.relative_to(ROOT).as_posix()
         print(f"\n==> {name}: {command_text(command)}", flush=True)
         print(f"    Log: {relative_log}", flush=True)
@@ -116,9 +117,11 @@ class VerificationRunner:
                 "",
                 "## Container integration",
                 "",
-                "Docker Compose runtime smoke is intentionally deferred to the final integration stage. "
-                "Run the repository CI workflow manually after feature work and regular checks are stable. "
-                "This is a deferral, not a passing result.",
+                (
+                    "Docker Compose runtime smoke is intentionally deferred to the final "
+                    "integration stage. Run the repository CI workflow manually after feature "
+                    "work and regular checks are stable. This is a deferral, not a passing result."
+                ),
                 "",
             ]
         )
@@ -167,11 +170,33 @@ class VerificationRunner:
             )
             if backend_ok:
                 backend_checks = [
-                    ("Ruff lint", [uv, "run", "--locked", "--extra", "dev", "ruff", "check", "app", "tests", "../scripts"]),
-                    ("Ruff format", [uv, "run", "--locked", "--extra", "dev", "ruff", "format", "--check", "app", "tests", "../scripts"]),
+                    (
+                        "Ruff lint",
+                        [
+                            uv, "run", "--locked", "--extra", "dev", "ruff",
+                            "check", "app", "tests", "../scripts",
+                        ],
+                    ),
+                    (
+                        "Ruff format",
+                        [
+                            uv, "run", "--locked", "--extra", "dev", "ruff",
+                            "format", "--check", "app", "tests", "../scripts",
+                        ],
+                    ),
                     ("Mypy", [uv, "run", "--locked", "--extra", "dev", "mypy", "app"]),
-                    ("Backend tests and coverage", [uv, "run", "--locked", "--extra", "dev", "pytest", "tests", "-q", "--cov=app", "--cov-report=term-missing", "--cov-fail-under=70"]),
-                    ("Backend dependency audit", [uv, "run", "--locked", "--extra", "dev", "pip-audit"]),
+                    (
+                        "Backend tests and coverage",
+                        [
+                            uv, "run", "--locked", "--extra", "dev", "pytest",
+                            "tests", "-q", "--cov=app", "--cov-report=term-missing",
+                            "--cov-fail-under=70",
+                        ],
+                    ),
+                    (
+                        "Backend dependency audit",
+                        [uv, "run", "--locked", "--extra", "dev", "pip-audit"],
+                    ),
                 ]
                 for name, command in backend_checks:
                     if not self.run_step(name, command, ROOT / "backend"):
@@ -220,7 +245,10 @@ class VerificationRunner:
         if exit_code:
             print("❌ One or more verification checks failed.")
         else:
-            print("✅ All applicable non-container checks passed. Docker integration remains deferred.")
+            print(
+                "✅ All applicable non-container checks passed. "
+                "Docker integration remains deferred."
+            )
         return exit_code
 
 
