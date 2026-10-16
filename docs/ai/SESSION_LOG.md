@@ -105,3 +105,10 @@
 
 - Inspect the regular CI run triggered by this commit and address failing checks.
 - Once the full system's features and regular checks are stable, manually run the Docker Compose smoke test workflow. Keep Phase 0's overall gate open until that final integration and UI review evidence exists.
+
+## 2026-10-16 (WIB) — Remove deprecated test client warning
+
+- The latest regular CI run [38851053518](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851053518) passed all configured non-container checks, including Ruff, mypy, seven backend tests, 100% coverage of the current API module, pip-audit, Next.js production build, Storybook build, npm audit, and Gitleaks. Docker was skipped by design.
+- Pytest showed a Starlette deprecation warning caused by importing `fastapi.testclient.TestClient` with the current `httpx` extra. The official Starlette docs now prefer `httpx2` for that wrapper.
+- Replaced the tiny health checks with `httpx.AsyncClient` + `ASGITransport`, requiring no additional dependency; pytest warnings are configured as errors. This should remove the warning rather than suppress it. CI must verify the change.
+- Clarified in both READMEs that Compose runtime validation is deferred and has not been passed yet.

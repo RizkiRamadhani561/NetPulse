@@ -92,3 +92,10 @@ Sources: [Uptime Kuma](https://github.com/louislam/uptime-kuma), [LibreNMS dashb
 3. Keep raw-packet/network capabilities out of the API/web containers.
 4. Use an internal-only lab network and synthetic SNMP fixture data.
 5. No telemetry, no real secrets in example files, and no public-network scan defaults.
+
+## 11. Test-client deprecation found during Phase 0 CI — 2026-10-16
+
+- **Source:** [Official Starlette TestClient documentation](https://www.starlette.io/testclient/) (checked 2026-10-16).
+- **Finding:** Starlette documents that its TestClient now uses `httpx2`; the plain `httpx` backing is still supported but deprecated.
+- **Action:** Phase 0 health tests use `httpx.AsyncClient` with `httpx.ASGITransport` rather than importing the deprecated TestClient. Pytest treats warnings as errors so new deprecations are visible in CI.
+- **Trade-off:** These tests exercise the ASGI HTTP contract, but do not test lifespan hooks. That is acceptable for the current health endpoints; lifespan-managed services and database startup tests belong to later phases.

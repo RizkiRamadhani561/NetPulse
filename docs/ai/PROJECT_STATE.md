@@ -7,9 +7,9 @@ Last updated: 2026-10-16 (WIB)
 - **Phase:** 0 — Foundation
 - **Implementation status:** ⚠️ Phase 0 foundation code and tooling are in place; the final phase gate is not yet passed.
 - **Repository:** `RizkiRamadhani561/NetPulse`, private, default branch `main`.
-- **Regular CI:** structure/security-contract checks, Ruff, backend tests, frontend typecheck/build/audit, and secret scan. The latest commit adds mypy, a 70% backend coverage floor, pip-audit, a Storybook build, lab contract tests, and report-producing verification scripts; their results are pending.
+- **Regular CI:** the latest run [38851053518](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851053518) passed structure/security contracts, Ruff, mypy, 7 backend tests with 100% coverage of the current API module (70% floor), pip-audit, TypeScript, Next.js and Storybook builds, npm audit, and Gitleaks. The new warning-as-error health-test adjustment is awaiting another CI run.
 - **Docker:** intentionally deferred to final integration per ADR-006. The last executed smoke failed with Next.js `EACCES` opening `/app/next-env.d.ts`; the Compose mount was narrowed to `src/` and `.storybook/`, but the runtime fix remains unverified.
-- **Last known successful baseline before additional checks:** [Actions run 38849910373](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38849910373). Its Docker job was skipped intentionally, not passed.
+- **Last full non-container verification:** [Actions run 38851053518](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851053518). Docker Compose was skipped intentionally, not passed.
 - **Release:** no release has been published.
 
 ## User-confirmed constraints
@@ -36,7 +36,7 @@ Last updated: 2026-10-16 (WIB)
 ## Verification snapshot
 
 - Baseline run [38849910373](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38849910373) passed the then-configured backend/structure tests, frontend typecheck/build/npm audit and secret scan. The Docker Compose job was skipped by design.
-- Newer CI additions—mypy, coverage threshold, pip-audit, Storybook build and lab static contracts—are not yet verified.
+- The newer CI additions—mypy, the 70% coverage floor, pip-audit, Storybook build and lab static contracts—passed in run 38851053518. The later change to eliminate a Starlette deprecation warning and enforce warnings-as-errors is awaiting CI.
 - No local Windows run, browser screenshot/axe review, independent review, Docker Compose build or SNMP simulator runtime test has been claimed.
 
 ## Open items for the Phase 0 gate

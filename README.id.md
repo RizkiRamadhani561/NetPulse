@@ -35,7 +35,7 @@ Di Windows PowerShell:
 ./scripts/verify.ps1 -Mode full
 ```
 
-Dari Git Bash atau WSL, gunakan `bash ./scripts/verify.sh --quick` atau `bash ./scripts/verify.sh --full`. Pemeriksaan cepat memvalidasi file inti, parsing JSON/TOML, kesamaan key terjemahan, dan beberapa konvensi keamanan/desain. Verifikasi penuh membutuhkan lockfile yang sudah diselesaikan, Docker/Node, dependensi tes Python, serta Gitleaks; pemeriksaan yang tidak tersedia tidak dianggap lulus.
+Dari Git Bash atau WSL, gunakan `bash ./scripts/verify.sh --quick` atau `bash ./scripts/verify.sh --full`. Pemeriksaan cepat memvalidasi struktur dan kontrak keamanan dasar. Verifikasi penuh menjalankan install terkunci, Ruff, mypy, pytest dengan ambang coverage 70%, pip-audit, TypeScript, build Next.js dan Storybook, npm audit, serta Gitleaks. Laporan dan log per langkah ditulis ke `docs/ai/verification/local-*`. Mode penuh tidak menjalankan Docker; tes runtime Compose ditunda sampai integrasi akhir.
 
 ## Lab jaringan
 

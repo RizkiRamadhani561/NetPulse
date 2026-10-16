@@ -5,3 +5,5 @@
 - A dashboard without collected samples should render an empty state, not fabricated uptime/latency values.
 - The dependency lockfiles are committed and enforced by CI: Python uses `uv sync --locked`; frontend uses `npm ci`.
 - Keep local verification cross-platform by routing PowerShell and Bash entry points through one Python runner. Save logs/report for each run, and never count deferred Docker checks as passing.
+
+- Current Starlette marks the legacy `httpx`-backed TestClient as deprecated. For API smoke/unit tests that do not require lifespan handling, use `httpx.AsyncClient` with `ASGITransport` and treat warnings as errors. Reference: https://www.starlette.io/testclient/.

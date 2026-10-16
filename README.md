@@ -16,26 +16,18 @@ NetPulse is an early-stage, self-hosted network-monitoring dashboard for home la
 
 Feature scope, UX notes, architecture decisions, and the project log live under docs/spec and docs/ai. Feature requirements will be made testable in docs/ai/TRACEABILITY.md before implementation.
 
-## Run the preview
+## Docker integration (deferred)
 
-You'll need Git, Docker Desktop with the WSL 2 backend (Windows), or Docker Engine and Compose (Linux), plus an internet connection for the first build.
+The Compose stack and isolated lab are defined, but runtime validation is intentionally deferred until the full feature set is ready. Do not rely on the current preview for real monitoring, and do not treat a successful source build as proof that the container stack works.
 
-In PowerShell, from the project root:
+At the final integration stage, use PowerShell from the repository root:
 
 ```powershell
 Copy-Item .env.example .env
 docker compose up --build
 ```
 
-Then open [http://localhost:3000](http://localhost:3000). The API health endpoint is [http://localhost:8000/api/v1/health](http://localhost:8000/api/v1/health).
-
-To stop the containers, press Ctrl+C and run:
-
-```powershell
-docker compose down
-```
-
-The ports bind to 127.0.0.1 by default, so the preview is not exposed to your LAN. The lab overlay is not enabled by the default command; read [lab/README.md](lab/README.md) before starting it.
+Then check [http://localhost:3000](http://localhost:3000) and [http://localhost:8000/api/v1/health](http://localhost:8000/api/v1/health). Stop with Ctrl+C and run `docker compose down`. The default ports bind to `127.0.0.1`; the lab overlay is not enabled by default. Read [lab/README.md](lab/README.md) before enabling it. The final runtime check must pass before the project is treated as fully integrated.
 
 ## Verify locally
 
