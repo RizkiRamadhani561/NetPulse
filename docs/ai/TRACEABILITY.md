@@ -4,10 +4,10 @@ Status meanings: ✅ verified with evidence; ⚠️ partial or waiting on a defe
 
 | ID | Acceptance criterion (Given/When/Then) | Code / artifact | Test / evidence | Status |
 |---|---|---|---|---|
-| OPS-01 | Given the API process is running, when /api/v1/health or /healthz is requested, then liveness is returned; when DB/scheduler are absent, /api/v1/ready returns 503 rather than claiming readiness. | backend/app/main.py | backend/tests/test_health.py; [Actions run 38851788088](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851788088): 7 tests passed, warning-free with warnings treated as errors, 100% of the current API module's 10 statements covered. Actual server runtime remains deferred. | ⚠️ |
+| OPS-01 | Given the API process is running, when /api/v1/health or /healthz is requested, then liveness is returned; when DB/scheduler are absent, /api/v1/ready returns 503 rather than claiming readiness. | backend/app/main.py | backend/tests/test_health.py; [Actions run 38852063602](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38852063602): 7 tests passed, warning-free with warnings treated as errors, 100% of the current API module's 10 statements covered. Actual server runtime remains deferred. | ⚠️ |
 | LAB-01 | Given the lab overlay is selected, when its Compose config is used, then synthetic HTTP/SNMP targets join only an internal lab network and no lab ports are published to the host. | docker-compose.lab.yml, lab/README.md, backend/tests/test_foundation_contracts.py | Contract test passed in the latest backend CI. Docker Compose/lab runtime validation is deferred by ADR-006 and has not passed. | ⚠️ |
 | LAB-03 | Given the lab fixtures are loaded, then SNMP records use well-formed system OIDs/synthetic values and the scenario remains declarative. | lab/fixtures/snmp/system.snmprec, lab/fixtures/oui-mini.csv, lab/scenarios/default.yml | Static fixture/scenario contract passed in CI. A live snmpsim parser/runtime test has not run. | ⚠️ |
-| UX-04 (foundation) | Given the dashboard shell is displayed, then visible focus and reduced-motion behavior are defined and status is not communicated only by color. | frontend/src/app/globals.css, frontend/src/components/dashboard-shell.tsx, frontend/src/components/dashboard-shell.stories.tsx | Static design/accessibility token checks and Storybook production build passed in [run 38851788088](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851788088). Screenshots, axe, keyboard-only, contrast and responsive behavior have not been visually inspected. | ⚠️ |
+| UX-04 (foundation) | Given the dashboard shell is displayed, then visible focus and reduced-motion behavior are defined and status is not communicated only by color. | frontend/src/app/globals.css, frontend/src/components/dashboard-shell.tsx, frontend/src/components/dashboard-shell.stories.tsx | Static design/accessibility token checks and Storybook production build passed in [run 38852063602](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38852063602). Screenshots, axe, keyboard-only, contrast and responsive behavior have not been visually inspected. | ⚠️ |
 
 ## Phase 0 automated verification
 
@@ -15,7 +15,7 @@ Status meanings: ✅ verified with evidence; ⚠️ partial or waiting on a defe
 - Ruff lint and format, mypy, pytest + coverage floor 70%, pip-audit: passed.
 - Frontend locked install, TypeScript, Next.js production build, Storybook production build, npm audit: passed. npm audit found 0 vulnerabilities.
 - Gitleaks CLI 8.30.1: passed; output reported no leaks found.
-- Evidence run: https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851788088 (commit a60c209).
+- Evidence run: https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38852063602 (commit 1b95aaf).
 
 ## Deferred gates — intentionally not marked as passed
 

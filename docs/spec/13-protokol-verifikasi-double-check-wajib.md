@@ -36,7 +36,7 @@ Buat di **Fase 0** dan pakai persis sama di lokal dan CI:
 
 ### NetPulse workflow override — Docker final-integration gate (ADR-006)
 
-Atas keputusan pengguna pada 2026-10-16, pemeriksaan runtime Docker Compose ditunda hingga fitur sistem selesai. Karena itu, `--full` tidak menjalankan atau memerlukan Docker; ini bukan penghapusan gerbang L3. Workflow GitHub Actions `Docker Compose smoke test` hanya berjalan saat `workflow_dispatch`, setelah `foundation`, `frontend`, dan `secrets` berhasil. Gerbang fase tetap terbuka sampai job manual tersebut lulus.
+Atas keputusan pengguna pada 2026-10-16, pemeriksaan runtime Docker Compose ditunda hingga seluruh sistem selesai dibuat. Karena itu, `--full` menguji semua bagian non-container dan tidak menjalankan atau memerlukan Docker; ini bukan penghapusan gerbang L3. Workflow GitHub Actions `Docker Compose smoke test` hanya berjalan saat `workflow_dispatch`, setelah `foundation`, `frontend`, dan `secrets` berhasil. Checkpoint implementasi Phase 0 boleh dicatat setelah pemeriksaan non-container lulus, tetapi bukan tanda bahwa integrasi/gerbang rilis lulus. Docker tetap gerbang integrasi akhir wajib dan tidak pernah dianggap lulus hanya karena ditunda.
 
 ## 13.4 Smoke test "dari nol" (`scripts/smoke.sh`)
 
@@ -126,6 +126,8 @@ Matikan backend di tengah polling · matikan DB · blokir DNS · putuskan jaring
 - [ ] Commit mengikuti Conventional Commits.
 
 **Per fase (gerbang):** `scripts/verify.sh --full` hijau · laporan verifikasi tersimpan · reviewer independen selesai dan temuan tinggi tertutup · bug terbuka dengan severity tinggi = 0 · matriks keterlacakan untuk semua ID fase berstatus ✅ (atau ⚠️/❓ yang dijelaskan dan kusetujui) · audit memori (15.5) selesai · **aku menyetujui** sebelum fase berikut.
+
+**Pengecualian urutan yang disetujui pengguna (ADR-006):** Docker/L3 boleh dijadwalkan pada integrasi akhir lintas proyek. Hal ini mengizinkan checkpoint implementasi terpisah, bukan menutup gerbang integrasi/rilis. Bukti UX/a11y dan review independen tetap harus dinyatakan jujur sebagai belum diuji sampai tersedia. Perubahan fase berikut tetap menunggu persetujuan pengguna.
 
 **v1.0.0:** semua gerbang Fase 0–5 lulus; orang yang belum pernah melihat proyek ini bisa memasang dan menjalankannya dari README dalam ≤ 10 menit (uji nyata, dicatat); demo meyakinkan; landing page live; `SECURITY.md` dan pemindaian rahasia pada seluruh riwayat Git bersih.
 
