@@ -64,7 +64,7 @@ def main() -> int:
                             break
                         failures.append(f"/healthz returned an unexpected payload: {payload!r}")
                         break
-                except (TimeoutError, urllib.error.URLError, OSError):
+                except TimeoutError, urllib.error.URLError, OSError:
                     pass
                 time.sleep(0.25)
             else:

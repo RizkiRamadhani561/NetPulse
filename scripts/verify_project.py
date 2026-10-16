@@ -9,7 +9,18 @@ import sys
 import tomllib
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+def configure_console_utf8() -> None:
+    """Avoid UnicodeEncodeError when status markers are printed on Windows."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            reconfigure(encoding="utf-8", errors="replace")
+
+
+configure_console_utf8()
+
+
+ROOT = Path(__file__).resolve().parents[1}
 REQUIRED_PATHS = (
     ".gitignore",
     ".env.example",
@@ -57,6 +68,37 @@ SECRET_NAMES = {
     "OIDC_CLIENT_SECRET",
     "SMTP_PASSWORD",
     "VAPID_PRIVATE_KEY",
+    "AI_API_KEY",
+}
+ENV_REQUIRED_NAMES = {
+    "APP_ENV",
+    "SECRET_KEY",
+    "ENCRYPTION_KEY",
+    "DATABASE_URL",
+    "ALLOWED_ORIGINS",
+    "TELEGRAM_BOT_TOKEN",
+    "TELEGRAM_CHAT_ID",
+    "DEMO_MODE",
+    "ALLOW_PUBLIC_SCAN",
+    "DEFAULT_TIMEZONE",
+    "LOG_LEVEL",
+    "RETENTION_RAW_DAYS",
+    "CHECK_CONCURRENCY",
+    "ENABLE_UPDATE_CHECK",
+    "ENABLE_MIKROTIK_WRITE",
+    "TRUSTED_PROXIES",
+    "SYSLOG_PORT",
+    "TRAP_PORT",
+    "VAPID_PUBLIC_KEY",
+    "VAPID_PRIVATE_KEY",
+    "OIDC_ISSUER",
+    "OIDC_CLIENT_ID",
+    "OIDC_CLIENT_SECRET",
+    "SMTP_HOST",
+    "SMTP_USER",
+    "SMTP_PASSWORD",
+    "ENABLE_AI",
+    "AI_PROVIDER",
     "AI_API_KEY",
 }
 
@@ -107,6 +149,11 @@ def check() -> int:
         env_values = parse_env_template(env_path)
         missing = sorted(SECRET_NAMES - env_values.keys())
         populated = sorted(name for name in SECRET_NAMES if env_values.get(name, ""))
+        missing_all = sorted(ENV_REQUIRED_NAMES - env_values.keys())
+        if missing_all:
+            fail(f"required variable names absent from .env.example: {', '.join(missing_all)}")
+        else:
+            ok("all required Phase 0 and documented v2 environment variable names exist")
         if missing:
             fail(f"secret variable names absent from .env.example: {', '.join(missing)}")
         elif populated:

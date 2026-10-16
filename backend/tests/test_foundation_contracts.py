@@ -85,3 +85,67 @@ def test_windows_quick_verification_runs_in_ci() -> None:
     assert "runs-on: windows-latest" in workflow
     assert "shell: pwsh" in workflow
     assert "run: ./scripts/verify.ps1 -Mode quick" in workflow
+
+
+def test_environment_template_covers_all_documented_runtime_variables() -> None:
+    template = (ROOT / ".env.example").read_text(encoding="utf-8")
+    documented = {
+        "APP_ENV",
+        "SECRET_KEY",
+        "ENCRYPTION_KEY",
+        "DATABASE_URL",
+        "ALLOWED_ORIGINS",
+        "TELEGRAM_BOT_TOKEN",
+        "TELEGRAM_CHAT_ID",
+        "DEMO_MODE",
+        "ALLOW_PUBLIC_SCAN",
+        "DEFAULT_TIMEZONE",
+        "LOG_LEVEL",
+        "RETENTION_RAW_DAYS",
+        "CHECK_CONCURRENCY",
+        "ENABLE_UPDATE_CHECK",
+        "ENABLE_MIKROTIK_WRITE",
+        "TRUSTED_PROXIES",
+        "SYSLOG_PORT",
+        "TRAP_PORT",
+        "VAPID_PUBLIC_KEY",
+        "VAPID_PRIVATE_KEY",
+        "OIDC_ISSUER",
+        "OIDC_CLIENT_ID",
+        "OIDC_CLIENT_SECRET",
+        "SMTP_HOST",
+        "SMTP_USER",
+        "SMTP_PASSWORD",
+        "ENABLE_AI",
+        "AI_PROVIDER",
+        "AI_API_KEY",
+    }
+    present = {
+        line.split("=", maxsplit=1)[0].strip()
+        for line in template.splitlines()
+        if line.strip() and not line.lstrip().startswith("#") and "=" in line
+    }
+
+    assert documented <= present
+
+
+def test_spec_index_local_markdown_links_resolve() -> None:
+    index = ROOT / "docs/spec/INDEX.md"
+    assert (ROOT / "PROMPT.md").is_file()
+
+    links = re.findall(r"\]\(([^)]+\.md)\)", index.read_text(encoding="utf-8"))
+    assert links
+    missing = [link for link in links if not (index.parent / link).is_file()]
+    assert not missing, f"broken local spec links: {missing}"
+
+
+def test_github_actions_are_pinned_to_full_commit_shas() -> None:
+    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    uses_lines = [
+        line.strip().split("uses:", maxsplit=1)[1].strip()
+        for line in workflow.splitlines()
+        if line.strip().startswith("uses:")
+    ]
+
+    assert uses_lines
+    assert all(re.fullmatch(r"[^@\s]+@[0-9a-f]{40}", action) for action in uses_lines)

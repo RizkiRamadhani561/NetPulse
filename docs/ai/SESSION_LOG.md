@@ -162,3 +162,12 @@
 - Added `scripts/smoke_api.py`, which starts the actual Uvicorn process on a temporary loopback port and checks liveness, the documented not-ready response, and OpenAPI over HTTP without Docker. CI and the shared full verification runner both invoke it.
 - Added a Windows-hosted quick verification job to exercise the PowerShell entry point on Windows, in addition to Linux verification.
 - The CI run must confirm the new runtime smoke and Windows wrapper; don't count them as passed before it finishes.
+
+## 2026-10-16 (WIB) — Expand Phase 0 static contracts and Windows smoke coverage
+
+- The Windows CI run exposed a real cross-platform issue: the verifier printed status emojis using the legacy Windows console encoding. The verifier and its runner now explicitly configure UTF-8 output rather than dropping the status markers.
+- Expanded quick verification to require every environment variable named in the master specification and its v2 extension; sensitive values must remain blank.
+- Added regression tests for local specification-index links and full SHA pins on all GitHub Actions.
+- Expanded Phase 0 traceability to include environment safety, CI contracts, documentation integrity, and the verification entry points in addition to OPS/LAB/UX.
+- The Windows job now resolves locked backend dependencies and runs the same real API process smoke test on loopback after the PowerShell quick check.
+- New fixes await CI; none are marked verified until the updated workflow reports a pass.
