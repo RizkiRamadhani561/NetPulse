@@ -7,7 +7,7 @@ Last updated: 2026-10-16 (WIB)
 - **Phase:** 0 — Foundation
 - **Implementation status:** ✅ Foundation implementation is in place and regular non-container CI is green. Formal integration/release gates remain explicitly open.
 - **Repository:** RizkiRamadhani561/NetPulse, private, default branch main.
-- **Latest regular CI:** [Run 38852063602](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38852063602), commit 1b95aaf. All three required jobs passed: foundation/backend, frontend build/audit, secret scanning.
+- **Latest regular CI:** [Run 38852297612](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38852297612), commit 8fe85e8. All three required jobs passed: foundation/backend, frontend build/audit, secret scanning.
 - **Coverage:** 7 backend tests passed with warnings-as-errors; current backend app module has 100% coverage of 10 statements, above the enforced 70% floor.
 - **Dependency/security checks:** pip-audit reported no known vulnerabilities; npm audit found 0 vulnerabilities; Gitleaks CLI 8.30.1 reported no leaks.
 - **Docker:** deliberately deferred to project-wide final integration per ADR-006 and the user's explicit direction. Previous smoke [run 38803517944](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38803517944) failed because Next.js couldn't open /app/next-env.d.ts; Compose now mounts only source directories, but runtime behavior remains unverified.
@@ -36,7 +36,7 @@ Last updated: 2026-10-16 (WIB)
 
 ## Latest verification snapshot
 
-- [Actions run 38852063602](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38852063602): complete, success.
+- [Actions run 38852297612](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38852297612): complete, success.
 - Quick verification through the shared entry point: 0 failures, 0 warnings.
 - Ruff lint/format, mypy, tests + 70% coverage floor, pip-audit: pass.
 - npm ci, TypeScript, Next.js production build, Storybook production build, npm audit: pass; npm audit found 0 vulnerabilities.
