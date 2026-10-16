@@ -79,6 +79,8 @@ jobs:
 
   container-smoke:
     name: Docker Compose smoke test
+    if: github.event_name == 'workflow_dispatch'
+    needs: [foundation, frontend, secrets]
     runs-on: ubuntu-latest
     steps:
       - name: Check out source

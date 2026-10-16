@@ -5,7 +5,7 @@
 | ID | Severity | Status | Summary | Evidence / next action |
 |---|---|---|---|---|
 | BUG-003 | Medium | Open | Storybook configuration and package compatibility have not been verified by installation/build. | Run npm run storybook and npm run build-storybook from frontend/ using the committed lockfile. |
-| BUG-004 | High | Open | Docker Compose smoke fails because Next.js 16.4 tries to write its generated `next-env.d.ts` into a source bind mount that is not writable by the non-root `node` user. The earlier TypeScript config rewrite issue was addressed, but the latest run exposed this generated-file permission issue. | Give `/app/next-env.d.ts` its own named volume, initialized from the image's node-owned file, and add a structural regression check. Rerun CI; close only after Compose smoke passes. Failed run: https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38803517944 |
+| BUG-004 | High | Deferred | Docker Compose smoke previously failed when Next.js 16.4 tried to write generated files inside a host bind-mounted project directory. The Compose config now mounts only source directories, and automatic Docker smoke runs are deferred until final integration. | After the feature set and regular CI checks are stable, manually dispatch the CI workflow on the intended branch. Confirm Compose healthchecks and all API/web/readiness assertions pass before resolving. Previous failure: https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38803517944 |
 
 ## Resolved findings
 

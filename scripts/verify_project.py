@@ -157,11 +157,21 @@ def check() -> int:
     compose_path = ROOT / "docker-compose.yml"
     if compose_path.is_file():
         compose_text = compose_path.read_text(encoding="utf-8")
-        required_mount = "frontend_next_env:/app/next-env.d.ts"
-        if required_mount not in compose_text or "frontend_next_env:" not in compose_text:
-            fail("Docker Compose must isolate the generated Next.js next-env.d.ts in a named volume")
+        required_mounts = (
+            "./frontend/src:/app/src:ro",
+            "./frontend/.storybook:/app/.storybook:ro",
+        )
+        missing_mounts = [mount for mount in required_mounts if mount not in compose_text]
+        has_broad_mount = any(
+            line.strip() == "- ./frontend:/app" for line in compose_text.splitlines()
+        )
+        if missing_mounts or has_broad_mount:
+            fail(
+                "Compose must mount source directories selectively so Next.js runtime files "
+                "remain writable by the non-root container user"
+            )
         else:
-            ok("Next.js generated declarations use a writable named volume")
+            ok("Compose keeps generated Next.js runtime files outside the source mount")
 
     pyproject = ROOT / "backend/pyproject.toml"
     if pyproject.exists():
