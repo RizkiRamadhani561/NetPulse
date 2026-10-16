@@ -4,7 +4,7 @@
 
 NetPulse is an early-stage, self-hosted network-monitoring dashboard for home labs, small offices, schools, and IT support teams. The goal is to make useful network checks easier to set up and understand, without needing a large monitoring stack from day one.
 
-> **Current status: Phase 0.** This repository contains the project scaffold, API health endpoint, first dashboard shell, and an isolated lab setup. Device monitoring, authentication, persistent storage, alerts, and discovery are still planned. Do not expose this preview to an untrusted network or rely on it for production monitoring.
+> **Current status: Phase 0 foundation implemented; final integration deferred.** Backend/frontend CI, Storybook build, audits, and secret scanning pass. Docker Compose runtime, the isolated lab runtime, browser accessibility inspection, and independent review remain outstanding. Device monitoring, authentication, persistent storage, alerts, and discovery are still planned. Do not expose this preview to an untrusted network or rely on it for production monitoring.
 
 ## What's in the stack
 
@@ -51,7 +51,7 @@ The quick check covers key files and safety contracts. Full verification additio
 
 | Phase | Scope | Status |
 |---|---|---|
-| 0 | Project scaffold, safe defaults, API and web shells, lab foundation | In progress |
+| 0 | Project scaffold, safe defaults, API and web shells, lab foundation | Implementation checks green; final integration deferred |
 | 1 | Setup, login, device management, monitoring state, dashboard, alerts | Planned |
 | 2 | TCP/HTTP/DNS/SSL checks, SNMP, discovery, incident history | Planned |
 | 3 | Topology, reporting, accessibility, and complete translations | Planned |

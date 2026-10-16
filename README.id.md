@@ -4,7 +4,7 @@
 
 NetPulse dirancang sebagai dashboard monitoring jaringan yang ringan dan self-hosted untuk home lab, kantor kecil, sekolah, dan tim IT support. Targetnya mencakup pengecekan uptime/latensi, metrik SNMP, discovery, riwayat insiden, dan notifikasi Telegram dengan pemasangan yang mudah dipahami pemula.
 
-> **Status proyek: fondasi Fase 0.** Repository ini baru berisi kerangka proyek dan tampilan dashboard awal. Monitoring perangkat, autentikasi, penyimpanan, notifikasi, dan discovery belum diimplementasikan. Jangan buka preview ini ke jaringan yang tidak tepercaya dan jangan gunakan sebagai sistem monitoring produksi.
+> **Status proyek: fondasi Fase 0 sudah diimplementasikan; integrasi akhir ditunda.** CI backend/frontend, Storybook, audit dependensi, dan pemindaian secret lulus. Runtime Docker Compose/lab, pemeriksaan aksesibilitas lewat browser, serta review independen masih menunggu. Monitoring perangkat, autentikasi, penyimpanan, notifikasi, dan discovery belum diimplementasikan. Jangan buka preview ini ke jaringan yang tidak tepercaya dan jangan gunakan sebagai sistem monitoring produksi.
 
 ## Stack yang direncanakan
 

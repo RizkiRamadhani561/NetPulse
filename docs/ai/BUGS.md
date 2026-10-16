@@ -4,8 +4,8 @@
 
 | ID | Severity | Status | Summary | Evidence / next action |
 |---|---|---|---|---|
-| BUG-003 | Medium | Resolved | Storybook configuration and the dashboard-shell story passed the production Storybook build in [Actions run 38851053518](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851053518). | CI step `Storybook production build` succeeded. Keep visual browser/a11y inspection as a separate UX-04 verification item. |
-| BUG-004 | High | Deferred | Docker Compose smoke previously failed when Next.js 16.4 tried to write generated files into a host bind-mounted project directory. Compose now mounts only source directories. | Deferred per ADR-006 until final integration. Manually dispatch the CI workflow after regular checks pass; verify web/API health and readiness assertions before resolving. Previous failure: https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38803517944 |
+| BUG-003 | Medium | Resolved | Storybook configuration and the dashboard-shell story passed the production build. | CI step Storybook production build succeeded in [run 38851788088](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851788088). Visual browser/a11y inspection stays separately tracked as UX-04. |
+| BUG-004 | High | Deferred by user | Docker Compose smoke previously failed when Next.js 16.4 tried to write generated files into a host bind-mounted project directory. Compose now mounts source directories selectively, but runtime is unverified. | At the user's direction, defer Docker validation until the full system is built. Then manually dispatch the workflow, confirm web/API health and readiness assertions, and only then resolve. Previous failure: https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38803517944 |
 
 ## Resolved findings
 

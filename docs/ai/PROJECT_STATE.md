@@ -5,12 +5,13 @@ Last updated: 2026-10-16 (WIB)
 ## Current position
 
 - **Phase:** 0 — Foundation
-- **Implementation status:** ⚠️ Phase 0 foundation code and tooling are in place; the final phase gate is not yet passed.
-- **Repository:** `RizkiRamadhani561/NetPulse`, private, default branch `main`.
-- **Regular CI:** the latest run [38851053518](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851053518) passed structure/security contracts, Ruff, mypy, 7 backend tests with 100% coverage of the current API module (70% floor), pip-audit, TypeScript, Next.js and Storybook builds, npm audit, and Gitleaks. The new warning-as-error health-test adjustment is awaiting another CI run.
-- **Docker:** intentionally deferred to final integration per ADR-006. The last executed smoke failed with Next.js `EACCES` opening `/app/next-env.d.ts`; the Compose mount was narrowed to `src/` and `.storybook/`, but the runtime fix remains unverified.
-- **Last full non-container verification:** [Actions run 38851053518](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851053518). Docker Compose was skipped intentionally, not passed.
-- **Release:** no release has been published.
+- **Implementation status:** ✅ Foundation implementation is in place and regular non-container CI is green. Formal integration/release gates remain explicitly open.
+- **Repository:** RizkiRamadhani561/NetPulse, private, default branch main.
+- **Latest regular CI:** [Run 38851788088](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851788088), commit a60c209. All three required jobs passed: foundation/backend, frontend build/audit, secret scanning.
+- **Coverage:** 7 backend tests passed with warnings-as-errors; current backend app module has 100% coverage of 10 statements, above the enforced 70% floor.
+- **Dependency/security checks:** pip-audit reported no known vulnerabilities; npm audit found 0 vulnerabilities; Gitleaks CLI 8.30.1 reported no leaks.
+- **Docker:** deliberately deferred to project-wide final integration per ADR-006 and the user's explicit direction. Previous smoke [run 38803517944](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38803517944) failed because Next.js couldn't open /app/next-env.d.ts; Compose now mounts only source directories, but runtime behavior remains unverified.
+- **Release:** none. Do not call the scaffold production-ready.
 
 ## User-confirmed constraints
 
@@ -18,35 +19,43 @@ Last updated: 2026-10-16 (WIB)
 - Demo content and real device monitoring should coexist in the MVP.
 - Support home labs and authorized office/school networks.
 - Indonesian and English UI from the MVP.
-- Local Docker Compose is the first deployment target, but runtime smoke is deferred to final integration.
+- Compose runtime smoke is held until the full system is built; this is a deferral, not a passing test.
 - Keep the repository private.
 - Commit/push of foundation and verification fixes is authorized; do not change visibility or other remote settings without approval.
 
 ## Current implementation
 
-- API scaffold: liveness endpoints are present; readiness correctly returns `not_ready` while database and scheduler dependencies do not exist.
-- Frontend: dashboard shell with ID/EN labels and empty states; monitoring values are not fabricated.
-- Secrets: `.env` is ignored; secret variables in `.env.example` are blank.
-- Lockfiles: `backend/uv.lock` and `frontend/package-lock.json` are committed and used by locked CI installs.
-- Original master specification stays at `PROMPT.md`; the working split references are in `docs/spec/`.
-- Isolated lab overlay, synthetic SNMP fixture, HTTP fixture, scenario definition, static lab-safety tests and Storybook setup/story are present. Runtime lab validation has not run.
-- Local skill and agent references exist under `.claude/skills/` and `.claude/agents/`; no third-party AI skill/MCP/plugin was installed.
-- `scripts/verify.sh` and `scripts/verify.ps1` call a cross-platform runner that records per-step logs and a Markdown report for quick/full non-container checks.
+- API scaffold exposes liveness endpoints; readiness honestly returns not_ready until database and scheduler dependencies exist.
+- Frontend dashboard shell has ID/EN labels, visual tokens, reduced-motion/focus rules, and empty states; monitoring values are not fabricated.
+- .env is ignored, and secret variables in .env.example remain blank.
+- backend/uv.lock and frontend/package-lock.json are committed and used by locked CI installs.
+- Original master specification remains in PROMPT.md; working split references are in docs/spec/.
+- Internal lab overlay, synthetic HTTP/SNMP fixtures, scenario, static lab-contract tests, Storybook setup/story, and local verification agent/skill notes exist. Runtime lab validation has not run.
+- Bash and PowerShell entry points call the cross-platform Python verification runner. CI now calls bash ./scripts/verify.sh --quick; --full covers the non-container toolchain and writes per-step logs/report.
+- GitHub Actions references are SHA-pinned; Gitleaks CLI is pinned to 8.30.1.
 
-## Verification snapshot
+## Latest verification snapshot
 
-- Baseline run [38849910373](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38849910373) passed the then-configured backend/structure tests, frontend typecheck/build/npm audit and secret scan. The Docker Compose job was skipped by design.
-- The newer CI additions—mypy, the 70% coverage floor, pip-audit, Storybook build and lab static contracts—passed in run 38851053518. The later change to eliminate a Starlette deprecation warning and enforce warnings-as-errors is awaiting CI.
-- No local Windows run, browser screenshot/axe review, independent review, Docker Compose build or SNMP simulator runtime test has been claimed.
+- [Actions run 38851788088](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851788088): complete, success.
+- Quick verification through the shared entry point: 0 failures, 0 warnings.
+- Ruff lint/format, mypy, tests + 70% coverage floor, pip-audit: pass.
+- npm ci, TypeScript, Next.js production build, Storybook production build, npm audit: pass; npm audit found 0 vulnerabilities.
+- Secret scan: pass; Gitleaks 8.30.1 output says no leaks found.
+- Docker Compose job: skipped as configured. Do not count as passed.
+- The local PowerShell full runner, browser screenshots/axe/keyboard review, SNMP simulator runtime, and independent reviewer have not been run.
 
-## Open items for the Phase 0 gate
+## Remaining gates and known blockers
 
-1. ⏳ Wait for current CI checks and fix any genuine failures without weakening them.
-2. ⏳ Resolve Storybook build or backend audit/type/coverage findings if CI identifies any.
-3. ⏳ Visual, keyboard-only and axe review is still outstanding; without a browser artifact it remains unverified.
-4. ⏳ Docker Compose and the lab overlay must pass the explicitly deferred integration check before the phase can be declared fully gated.
-5. ⏳ Run a clean Windows `scripts/verify.ps1 -Mode full` when local toolchains are available.
+1. **BUG-004 / Docker integration:** manually dispatch the Compose smoke workflow after the full system is implemented. Confirm API/web health, home route, and readiness behavior. Keep unresolved until it passes.
+2. **LAB-01 / LAB-03:** static safety contracts pass; actual lab compose and SNMP simulator runtime remain unverified until final integration.
+3. **UX-04:** Storybook builds, but no real browser screenshots, axe report, keyboard-only, contrast, or responsive-overflow review is available yet.
+4. **Independent review:** repository review instructions exist, but no independent reviewer result has been produced.
+5. **Windows:** a clean scripts/verify.ps1 -Mode full run is pending. CI ran on hosted Ubuntu.
+
+## Phase 0 decision
+
+The foundation implementation and automated non-container checks are complete. At the user's direction, Docker runtime is a project-wide final-integration gate rather than a task that must run after every feature commit or block ongoing implementation. The phase report records this exception explicitly; it does not turn deferred checks into passes. Visual/a11y and independent review also remain unverified, so there is no production/release sign-off.
 
 ## Next step
 
-Review the newest CI run, fix its findings, and repeat until all non-container checks pass. Do not begin Phase 1 or claim the Phase 0 gate has passed while deferred runtime/UI evidence is outstanding.
+Present the Phase 0 report for review and wait for approval before beginning Phase 1. Keep all deferred runtime/UI/review gates visible in the project state.
