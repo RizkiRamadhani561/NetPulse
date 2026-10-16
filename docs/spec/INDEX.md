@@ -23,3 +23,4 @@ The design and feature scope is organized by section below. Each file is a worki
 | [16-cara-kerja-fase-dan-gerbang.md](16-cara-kerja-fase-dan-gerbang.md) | Phases and approval gates |
 | [17-konteks-tentangku.md](17-konteks-tentangku.md) | Contributor learning context |
 | [18-lampiran.md](18-lampiran.md) | Templates and prompts |
+| [19-network-workbench-proposal.md](19-network-workbench-proposal.md) | Proposed hybrid Network Workbench, Learning/Professional modes, tool runner and safety boundaries |
