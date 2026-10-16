@@ -5,7 +5,7 @@ No third-party skills, MCP servers, or plugins were installed as part of Phase 0
 | Item | Source / version | Review status | Use |
 |---|---|---|---|
 | Gitleaks pre-commit hook | `gitleaks/gitleaks`, `v8.30.1` | ⚠️ Configured, not executed in this environment | Secret scanning before commit |
-| Gitleaks GitHub Action | commit `e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e` | ✅ Passed in [run 38851350669](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851350669); pinned in CI | CI secret scan |
+| Gitleaks GitHub Action | commit `e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e`; CLI `8.30.1` | ✅ Action and CLI version pinned; CI rerun pending | CI secret scan |
 
 Before release, pin external GitHub Actions to reviewed commit SHAs and verify license, provenance, and permissions. Do not install extra skills/MCPs from untrusted registries.
 

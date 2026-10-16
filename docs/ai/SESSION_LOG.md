@@ -117,3 +117,9 @@
 
 - Pinned `actions/checkout`, `actions/setup-python`, `actions/setup-node`, and `gitleaks/gitleaks-action` to the exact full commit SHAs reported by the successful CI run [38851350669](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851350669).
 - The purpose is reproducible workflow inputs, not a change to runtime behavior. The new commit must run through CI again before the SHA-pinned state is called verified.
+
+## 2026-10-16 (WIB) — Pin the Gitleaks CLI version
+
+- Confirmed the SHA-pinned workflow passed in [run 38851574192](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851574192).
+- Its action was using CLI 8.24.3 by default. Set the supported `GITLEAKS_VERSION` environment variable to `8.30.1`, the current release found in official Gitleaks release notes, so the secret scanner version is explicit and aligned with the reviewed tooling.
+- The new commit must pass secret scanning and the full regular CI again before being recorded as verified.

@@ -103,4 +103,4 @@ Sources: [Uptime Kuma](https://github.com/louislam/uptime-kuma), [LibreNMS dashb
 ## 12. Pinning CI actions — 2026-10-16
 
 - The successful workflow run [38851350669](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851350669) reported these resolved action commits: checkout `d23441a48e516b6c34aea4fa41551a30e30af803`, setup-python `ece7cb06caefa5fff74198d8649806c4678c61a1`, setup-node `249970729cb0ef3589644e2896645e5dc5ba9c38`, and Gitleaks Action `e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e`.
-- **Decision:** pin these workflow references to their full commit SHAs to avoid mutable action tags. CI must rerun after this change; revisit pins during controlled dependency updates.
+- **Decision:** pin these workflow references to their full commit SHAs to avoid mutable action tags. The action's `GITLEAKS_VERSION` is explicitly set to `8.30.1`, the latest release found at the time of review. See the [official action documentation](https://github.com/gitleaks/gitleaks-action/blob/master/README.md) for the supported environment variable. Revisit pins/version during controlled dependency updates.
