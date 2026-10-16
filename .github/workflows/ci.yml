@@ -51,9 +51,29 @@ jobs:
         working-directory: backend
         run: uv run --locked --extra dev pytest tests -q --cov=app --cov-report=term-missing --cov-fail-under=70
 
+      - name: API runtime smoke without Docker
+        working-directory: backend
+        run: uv run --locked --extra dev python ../scripts/smoke_api.py
+
       - name: Backend dependency audit
         working-directory: backend
         run: uv run --locked --extra dev pip-audit
+
+  windows-quick:
+    name: Windows PowerShell verification
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: "3.14.8"
+
+      - name: Run the PowerShell quick gate
+        shell: pwsh
+        run: ./scripts/verify.ps1 -Mode quick
 
   frontend:
     name: Frontend typecheck, build, and audit

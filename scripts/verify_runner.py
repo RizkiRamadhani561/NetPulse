@@ -216,6 +216,10 @@ class VerificationRunner:
                         ],
                     ),
                     (
+                        "API runtime smoke without Docker",
+                        [uv, "run", "--locked", "--extra", "dev", "python", "../scripts/smoke_api.py"],
+                    ),
+                    (
                         "Backend dependency audit",
                         [uv, "run", "--locked", "--extra", "dev", "pip-audit"],
                     ),
@@ -230,6 +234,7 @@ class VerificationRunner:
                     "Ruff format",
                     "Mypy",
                     "Backend tests and coverage",
+                    "API runtime smoke without Docker",
                     "Backend dependency audit",
                 ):
                     self.record_status(name, "⏭️ Skipped", "backend dependency sync failed")

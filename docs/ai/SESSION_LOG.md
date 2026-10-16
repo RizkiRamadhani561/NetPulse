@@ -156,3 +156,9 @@
 - The PR check for Gitleaks failed with a 403 while the action queried `pulls/{number}/commits`. This is a GitHub token permission/configuration failure, not a Gitleaks secret finding. Added the minimum `pull-requests: read` permission and a static regression test for it.
 - Added an actual Chromium pass for the production-built UI using pinned Playwright 1.64.1 and @axe-core/playwright 4.14.0. It checks locale switching, keyboard focus, desktop/mobile overflow, non-fabricated metric placeholders, WCAG 2/2.1/2.2 AA violations, console errors, and captures screenshots as an artifact.
 - The test and report are pending the new CI results; no browser or accessibility pass is claimed until those results and screenshots are inspected.
+
+## 2026-10-16 (WIB) — Add real API process and Windows wrapper checks
+
+- Added `scripts/smoke_api.py`, which starts the actual Uvicorn process on a temporary loopback port and checks liveness, the documented not-ready response, and OpenAPI over HTTP without Docker. CI and the shared full verification runner both invoke it.
+- Added a Windows-hosted quick verification job to exercise the PowerShell entry point on Windows, in addition to Linux verification.
+- The CI run must confirm the new runtime smoke and Windows wrapper; don't count them as passed before it finishes.

@@ -68,3 +68,20 @@ def test_browser_audit_uses_pinned_tools_and_upload_action() -> None:
     assert '"playwright": "1.64.1"' in workflow
     assert "node scripts/verify_ui.cjs" in workflow
     assert re.search(r"uses: actions/upload-artifact@[0-9a-f]{40}", workflow)
+
+
+def test_api_runtime_smoke_is_part_of_ci_and_full_verification() -> None:
+    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    runner = (ROOT / "scripts/verify_runner.py").read_text(encoding="utf-8")
+
+    assert "API runtime smoke without Docker" in workflow
+    assert "uv run --locked --extra dev python ../scripts/smoke_api.py" in workflow
+    assert "scripts/smoke_api.py" in runner
+
+
+def test_windows_quick_verification_runs_in_ci() -> None:
+    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+
+    assert "runs-on: windows-latest" in workflow
+    assert "shell: pwsh" in workflow
+    assert "run: ./scripts/verify.ps1 -Mode quick" in workflow
