@@ -31,7 +31,15 @@
 
 ## ADR-005 — Do not fake lockfiles
 
-- **Status:** Accepted for this preparation artifact.
-- **Context:** The preparation environment could not reach npm/PyPI; a complete resolver-generated lockfile cannot be honestly produced without dependency metadata.
-- **Decision:** Keep manifests, record exact verified direct versions where available, and leave lockfiles absent until they can be generated and reviewed online. Full verification must remain blocked until lockfiles exist.
-- **Consequence:** This archive is not yet a reproducible build and Phase 0 is not complete.
+- **Status:** SUPERSEDED by commit [285a8b6](https://github.com/RizkiRamadhani561/NetPulse/commit/285a8b6d3154284c3308e82b80b52f60ae24cbb1).
+- **Context:** The preparation environment initially could not reach npm/PyPI, so resolver-generated lockfiles could not honestly be created there.
+- **Decision:** Do not hand-write or fabricate lockfile metadata. Later, GitHub Actions successfully resolved and committed `backend/uv.lock` and `frontend/package-lock.json`; locked installs are now mandatory.
+- **Consequence:** The original limitation is historical. Continue verifying the committed graph with `uv sync --locked`, `npm ci`, and dependency audits.
+
+## ADR-006 — Defer Docker runtime integration to the final system stage
+
+- **Status:** Accepted on 2026-10-16 at the user's direction.
+- **Context:** The initial Compose smoke exposed a Next.js generated-file permission failure and repeated integration retries were interrupting regular feature work.
+- **Options:** A) Keep Compose smoke on every push; B) disable Docker validation entirely; C) retain the smoke but run it manually after backend, frontend, and secret checks pass.
+- **Decision:** C. Regular CI validates code, tests, type checks, builds, audits, and secrets. The Docker Compose smoke job runs only via manual `workflow_dispatch` and depends on those checks.
+- **Consequence:** Docker testing is deferred, not waived. The Phase 0 integration gate remains open until the manual container smoke passes at the agreed final-integration point.

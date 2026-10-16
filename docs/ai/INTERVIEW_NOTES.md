@@ -13,3 +13,9 @@ The preview is meant for local development. Binding to `127.0.0.1` reduces the c
 ## Why there is no fake monitoring data
 
 Fake uptime or latency can mislead someone evaluating a monitoring tool. The UI uses explicit empty states until real samples or intentionally labeled demo fixtures are implemented.
+
+
+## Why Compose smoke is a separate final-integration gate
+
+- Container runtime testing gives valuable integration evidence, but an early generated-file permission issue was interrupting every CI push. The user's chosen trade-off is to keep regular lint/type/test/build/audit/secret checks on each change and retain Docker Compose smoke as a manual gate after the feature set is ready.
+- This does not waive the test: the project remains Phase 0 until the manual integration check passes. The decision is recorded as ADR-006.

@@ -29,10 +29,14 @@ Aturan pemakaian: tiap commit kode → minimal **L0–L2**. Tiap fitur selesai �
 ## 13.3 `scripts/verify.sh` (satu pintu)
 
 Buat di **Fase 0** dan pakai persis sama di lokal dan CI:
-- `--quick` (L0–L2), `--full` (L0–L5); keluar dengan kode ≠ 0 bila ada langkah gagal.
-- Menulis laporan Markdown dan artefak (screenshot, coverage, JSON Lighthouse, hasil audit) ke `docs/ai/verification/<YYYY-MM-DD>-<label>/`.
-- Idempoten dan aman dijalankan berulang; tidak menyentuh jaringan nyata (hanya lab Docker).
+- `--quick` memvalidasi struktur dan kontrak keamanan dasar; `--full` menjalankan verifikasi non-container (dependency locks, lint/format, mypy, unit tests + coverage ≥ 70%, pip-audit, TypeScript, Next.js/Storybook builds, npm audit, Gitleaks). Non-zero exit code berarti minimal satu pemeriksaan gagal.
+- Menulis laporan Markdown dan log per langkah ke `docs/ai/verification/local-<timestamp>/`.
+- Idempoten dan aman dijalankan berulang; tidak menyentuh jaringan nyata.
 - Mencetak ringkasan akhir berformat tabel: langkah · status · durasi · lokasi bukti.
+
+### NetPulse workflow override — Docker final-integration gate (ADR-006)
+
+Atas keputusan pengguna pada 2026-10-16, pemeriksaan runtime Docker Compose ditunda hingga fitur sistem selesai. Karena itu, `--full` tidak menjalankan atau memerlukan Docker; ini bukan penghapusan gerbang L3. Workflow GitHub Actions `Docker Compose smoke test` hanya berjalan saat `workflow_dispatch`, setelah `foundation`, `frontend`, dan `secrets` berhasil. Gerbang fase tetap terbuka sampai job manual tersebut lulus.
 
 ## 13.4 Smoke test "dari nol" (`scripts/smoke.sh`)
 

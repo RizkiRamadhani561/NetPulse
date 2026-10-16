@@ -53,7 +53,7 @@ bash ./scripts/verify.sh --quick
 bash ./scripts/verify.sh --full
 ```
 
-The quick check covers key files and basic configuration. Full verification needs the relevant toolchains, resolved lockfiles, and Gitleaks. Checks that could not be run are not treated as passed.
+The quick check covers key files and safety contracts. Full verification additionally runs locked dependency installs, Ruff, mypy, backend tests with a 70% coverage floor, pip-audit, TypeScript, the Next.js and Storybook builds, npm audit, and Gitleaks. It writes a Markdown report and per-step logs under `docs/ai/verification/local-*`. Docker Compose runtime integration is deliberately held for the final stage; it has a manual GitHub Actions job and is not counted as passed by local `--full`.
 
 ## Roadmap
 

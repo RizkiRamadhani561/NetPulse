@@ -14,7 +14,7 @@ NetPulse dirancang sebagai dashboard monitoring jaringan yang ringan dan self-ho
 - **Runtime:** Docker Compose, dengan profil lab terisolasi
 - **Quality:** pytest, Ruff, pengecekan TypeScript, Playwright, Gitleaks, audit dependensi
 
-Hasil riset versi ada di [`docs/ai/RESEARCH.md`](docs/ai/RESEARCH.md). Lockfile dependensi belum dibuat karena registry paket tidak bisa dijangkau dari lingkungan penyusunan paket ini. Karena itu, build yang reproducible belum boleh diklaim.
+Hasil riset versi ada di [`docs/ai/RESEARCH.md`](docs/ai/RESEARCH.md). Lockfile `backend/uv.lock` dan `frontend/package-lock.json` sudah di-commit dan dipakai CI melalui `uv sync --locked` serta `npm ci`. Build terbaru tetap harus dibuktikan oleh hasil CI, bukan hanya karena lockfile tersedia.
 
 ## Persyaratan
 
@@ -22,25 +22,9 @@ Hasil riset versi ada di [`docs/ai/RESEARCH.md`](docs/ai/RESEARCH.md). Lockfile 
 - Git
 - Internet saat pertama kali membangun image/mengunduh dependensi
 
-## Menjalankan preview lokal
+## Pratinjau Docker (ditunda ke integrasi akhir)
 
-1. Clone repository, lalu ekstrak/salin isi arsip Fase 0 ke root clone jika memakai arsip yang disiapkan.
-2. Salin `.env.example` menjadi `.env` lewat PowerShell. File contoh tidak berisi kredensial; biarkan bagian rahasia kosong sampai fiturnya dibuat.
-
-   ```powershell
-   Copy-Item .env.example .env
-   ```
-
-3. Jalankan:
-
-   ```powershell
-   docker compose up --build
-   ```
-
-4. Buka [http://localhost:3000](http://localhost:3000). Endpoint liveness API ada di [http://localhost:8000/api/v1/health](http://localhost:8000/api/v1/health).
-5. Hentikan layanan dengan `docker compose down`.
-
-Port dipasang ke `127.0.0.1` secara default, jadi belum terbuka ke perangkat lain di LAN.
+Konfigurasi Compose tersedia, tetapi pengujian runtime sengaja ditunda sampai fitur sistem selesai dan pemeriksaan kode stabil. Jangan anggap preview container sudah tervalidasi. Pada tahap integrasi akhir, salin `.env.example` menjadi `.env`, jalankan `docker compose up --build`, cek dashboard/API, lalu hentikan dengan `docker compose down`. Port layanan dirancang hanya terikat ke `127.0.0.1` agar tidak terbuka ke LAN secara default.
 
 ## Verifikasi lokal
 

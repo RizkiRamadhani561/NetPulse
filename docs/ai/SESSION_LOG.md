@@ -90,3 +90,18 @@
 - The failed attempt to mount a named volume over the single `next-env.d.ts` file was discarded; it was not a valid single-file-volume fix.
 - Changed GitHub Actions so the Docker Compose smoke job runs only on manual `workflow_dispatch`, after backend checks, frontend checks, and secret scanning pass. Push and pull-request CI continue checking those components without repeatedly failing on the deferred container issue.
 - Docker validation remains intentionally open. Run the workflow manually after the feature set is implemented; do not mark the Docker blocker resolved until it passes.
+
+## 2026-10-16 (WIB) — Phase 0 verification and Storybook foundation
+
+- Added a dashboard-shell Storybook story so the existing Next.js + Vite Storybook configuration has a concrete component entry.
+- Added backend tests for the /healthz alias and static safety contracts: default service ports stay on loopback; lab services stay on an internal network with no host-published ports; SNMP fixture records and scenario stay synthetic/declarative.
+- Added mypy, a 70% backend coverage floor, pip-audit, and npm run build-storybook to regular CI.
+- Consolidated Bash and PowerShell verification commands around scripts/verify_runner.py. Full verification records per-step logs and a Markdown report; it no longer runs Docker Compose.
+- Docker remains a manual final-integration gate under ADR-006, not a passing test.
+- Updated the working verification specification, traceability, lockfile history, and README ID so they match the repository's actual lockfiles and verification workflow.
+- Latest CI for these additions is pending at time of commit. Fix any genuine static/type/audit/Storybook findings from actual logs; do not weaken checks.
+
+### Next
+
+- Inspect the regular CI run triggered by this commit and address failing checks.
+- Once the full system's features and regular checks are stable, manually run the Docker Compose smoke test workflow. Keep Phase 0's overall gate open until that final integration and UI review evidence exists.

@@ -67,7 +67,7 @@ Source: [OWASP ASVS releases](https://github.com/OWASP/ASVS/releases), [OWASP AS
 ## 8. Secrets and GitHub Actions
 
 - Gitleaks CLI v8.30.1 was visible on the project release listing; the official GitHub Action has a v3 line using Node 24. The previous v2 runtime no longer works on GitHub-hosted runners after the documented September 2026 removal of Node 20.
-- Configured Gitleaks in `.pre-commit-config.yaml` and `.github/workflows/ci.yml`. Neither has been run yet in this preparation environment.
+- Configured Gitleaks in `.pre-commit-config.yaml` and `.github/workflows/ci.yml`. The GitHub Actions secret-scan job passed in run [38849910373](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38849910373); a local hook run is still unverified.
 - Before v1.0.0, review and pin third-party GitHub Actions to exact commit SHAs, verify their permissions, and enable GitHub secret scanning + push protection manually if available. These repository settings have not been changed.
 
 Sources: [Gitleaks releases](https://github.com/gitleaks/gitleaks/releases), [Gitleaks Action v3 migration](https://github.com/gitleaks/gitleaks-action/releases).
