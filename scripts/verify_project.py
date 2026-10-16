@@ -154,6 +154,15 @@ def check() -> int:
         except json.JSONDecodeError as exc:
             fail(f"invalid JSON in {rel}: {exc}")
 
+    compose_path = ROOT / "docker-compose.yml"
+    if compose_path.is_file():
+        compose_text = compose_path.read_text(encoding="utf-8")
+        required_mount = "frontend_next_env:/app/next-env.d.ts"
+        if required_mount not in compose_text or "frontend_next_env:" not in compose_text:
+            fail("Docker Compose must isolate the generated Next.js next-env.d.ts in a named volume")
+        else:
+            ok("Next.js generated declarations use a writable named volume")
+
     pyproject = ROOT / "backend/pyproject.toml"
     if pyproject.exists():
         try:

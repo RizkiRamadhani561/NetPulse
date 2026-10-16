@@ -75,3 +75,10 @@
 - The latest run after preconfiguring Next.js 16.4 defaults had passed backend checks, frontend checks, and secret scanning; Docker Compose smoke still had no final result at the last check.
 - Reduced the Linux smoke and Bash full-verification HTTP retry count from 30 to 5. Compose now waits for the API/web healthchecks before those requests, so 30 retries per endpoint were excessive and delayed actionable failure logs.
 - Healthchecks, API liveness, frontend health/home requests, and the expected 503 readiness response remain required. This is only a retry bound, not a skipped assertion.
+
+## 2026-10-16 (WIB) — Isolate Next.js generated declaration file
+
+- Investigated failed run [38803517944](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38803517944). Both images built and the API stayed healthy; the web healthcheck timed out because Next.js 16.4 threw `EACCES` opening `/app/next-env.d.ts`.
+- The development service bind-mounts the host's `frontend/` over `/app`, which hides the image's node-owned permissions. Next.js manages `next-env.d.ts` and needs to write it during startup.
+- Added a dedicated named volume at `/app/next-env.d.ts`, which is initialized from the image copy where the file is owned by `node`. This preserves source hot reload while keeping the generated declaration writable without running the dev process as root.
+- Added a structural regression check requiring this volume mount. BUG-004 remains open until the next Docker Compose smoke test passes.
