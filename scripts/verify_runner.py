@@ -217,7 +217,15 @@ class VerificationRunner:
                     ),
                     (
                         "API runtime smoke without Docker",
-                        [uv, "run", "--locked", "--extra", "dev", "python", "../scripts/smoke_api.py"],
+                        [
+                            uv,
+                            "run",
+                            "--locked",
+                            "--extra",
+                            "dev",
+                            "python",
+                            "../scripts/smoke_api.py",
+                        ],
                     ),
                     (
                         "Backend dependency audit",
