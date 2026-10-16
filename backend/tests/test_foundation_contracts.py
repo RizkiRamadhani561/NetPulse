@@ -51,7 +51,6 @@ def test_default_lab_scenario_is_declarative_and_uses_lab_hosts() -> None:
     assert "execution is not implemented in Phase 0" in scenario
 
 
-
 def test_gitleaks_job_can_read_pull_request_metadata() -> None:
     workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
     secrets_job = workflow.split("\n  secrets:\n", maxsplit=1)[1]
