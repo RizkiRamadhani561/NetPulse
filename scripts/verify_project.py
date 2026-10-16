@@ -9,6 +9,10 @@ import sys
 import tomllib
 from pathlib import Path
 
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
 def configure_console_utf8() -> None:
     """Avoid UnicodeEncodeError when status markers are printed on Windows."""
     for stream in (sys.stdout, sys.stderr):
@@ -20,7 +24,6 @@ def configure_console_utf8() -> None:
 configure_console_utf8()
 
 
-ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_PATHS = (
     ".gitignore",
     ".env.example",
