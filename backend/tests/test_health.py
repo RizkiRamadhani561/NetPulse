@@ -22,3 +22,11 @@ def test_ready_endpoint_does_not_claim_readiness_before_dependencies_exist() -> 
             "scheduler": "not_started",
         },
     }
+
+
+
+def test_healthz_alias_stays_available_for_container_healthcheck() -> None:
+    response = client.get("/healthz")
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok", "service": "netpulse-api"}

@@ -43,9 +43,17 @@ jobs:
         working-directory: backend
         run: uv run --locked --extra dev ruff format --check app tests ../scripts
 
-      - name: Backend tests
+      - name: Static type check
         working-directory: backend
-        run: uv run --locked --extra dev pytest tests -q
+        run: uv run --locked --extra dev mypy app
+
+      - name: Backend tests and coverage
+        working-directory: backend
+        run: uv run --locked --extra dev pytest tests -q --cov=app --cov-report=term-missing --cov-fail-under=70
+
+      - name: Backend dependency audit
+        working-directory: backend
+        run: uv run --locked --extra dev pip-audit
 
   frontend:
     name: Frontend typecheck, build, and audit
@@ -72,6 +80,10 @@ jobs:
       - name: Production build
         working-directory: frontend
         run: npm run build
+
+      - name: Storybook production build
+        working-directory: frontend
+        run: npm run build-storybook
 
       - name: Dependency audit
         working-directory: frontend

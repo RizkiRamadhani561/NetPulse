@@ -55,5 +55,4 @@ Thumbs.db
 
 # Local reports/artifacts; keep placeholders and tracked reports
 artifacts/
-docs/ai/verification/**
-!docs/ai/verification/README.md
+docs/ai/verification/local-*/
