@@ -12,9 +12,7 @@ def test_default_services_only_publish_ports_on_loopback() -> None:
     assert '"127.0.0.1:3000:3000"' in compose
     assert "./frontend/src:/app/src:ro" in compose
     assert "./frontend/.storybook:/app/.storybook:ro" in compose
-    assert not any(
-        line.strip() == "- ./frontend:/app" for line in compose.splitlines()
-    )
+    assert not any(line.strip() == "- ./frontend:/app" for line in compose.splitlines())
 
 
 def test_lab_overlay_is_internal_and_has_no_published_ports() -> None:
@@ -31,9 +29,7 @@ def test_lab_overlay_is_internal_and_has_no_published_ports() -> None:
 def test_snmp_fixture_contains_well_formed_synthetic_records() -> None:
     fixture = ROOT / "lab/fixtures/snmp/system.snmprec"
     records = [
-        line.split("|")
-        for line in fixture.read_text(encoding="utf-8").splitlines()
-        if line.strip()
+        line.split("|") for line in fixture.read_text(encoding="utf-8").splitlines() if line.strip()
     ]
 
     assert records
@@ -42,9 +38,7 @@ def test_snmp_fixture_contains_well_formed_synthetic_records() -> None:
     assert all(record[1].isdigit() for record in records)
     values = " ".join(record[2] for record in records).lower()
     assert "netpulse" in values
-    assert not any(
-        word in values for word in ("password", "community string", "real router")
-    )
+    assert not any(word in values for word in ("password", "community string", "real router"))
 
 
 def test_default_lab_scenario_is_declarative_and_uses_lab_hosts() -> None:

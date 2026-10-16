@@ -36,9 +36,7 @@ class VerificationRunner:
         self.report_dir.mkdir(parents=True, exist_ok=True)
         self.rows: list[dict[str, str]] = []
 
-    def record(
-        self, name: str, status: str, duration: float, log_path: str, detail: str
-    ) -> None:
+    def record(self, name: str, status: str, duration: float, log_path: str, detail: str) -> None:
         self.rows.append(
             {
                 "name": name,
@@ -49,9 +47,7 @@ class VerificationRunner:
             }
         )
 
-    def run_step(
-        self, name: str, command: list[str], cwd: Path = ROOT
-    ) -> bool:
+    def run_step(self, name: str, command: list[str], cwd: Path = ROOT) -> bool:
         step_slug = name.lower().replace(" ", "-")
         log_file = self.report_dir / f"{len(self.rows) + 1:02d}-{step_slug}.log"
         relative_log = log_file.relative_to(ROOT).as_posix()
@@ -144,12 +140,13 @@ class VerificationRunner:
             npm = "npm.cmd" if os.name == "nt" else "npm"
             gitleaks = "gitleaks"
             missing = [
-                tool for label, tool in
-                (("uv", uv), ("npm", npm), ("gitleaks", gitleaks))
+                tool
+                for label, tool in (("uv", uv), ("npm", npm), ("gitleaks", gitleaks))
                 if shutil.which(tool) is None
             ]
             missing_lockfiles = [
-                path for path in ("backend/uv.lock", "frontend/package-lock.json")
+                path
+                for path in ("backend/uv.lock", "frontend/package-lock.json")
                 if not (ROOT / path).is_file()
             ]
             if missing or missing_lockfiles:
@@ -173,23 +170,48 @@ class VerificationRunner:
                     (
                         "Ruff lint",
                         [
-                            uv, "run", "--locked", "--extra", "dev", "ruff",
-                            "check", "app", "tests", "../scripts",
+                            uv,
+                            "run",
+                            "--locked",
+                            "--extra",
+                            "dev",
+                            "ruff",
+                            "check",
+                            "app",
+                            "tests",
+                            "../scripts",
                         ],
                     ),
                     (
                         "Ruff format",
                         [
-                            uv, "run", "--locked", "--extra", "dev", "ruff",
-                            "format", "--check", "app", "tests", "../scripts",
+                            uv,
+                            "run",
+                            "--locked",
+                            "--extra",
+                            "dev",
+                            "ruff",
+                            "format",
+                            "--check",
+                            "app",
+                            "tests",
+                            "../scripts",
                         ],
                     ),
                     ("Mypy", [uv, "run", "--locked", "--extra", "dev", "mypy", "app"]),
                     (
                         "Backend tests and coverage",
                         [
-                            uv, "run", "--locked", "--extra", "dev", "pytest",
-                            "tests", "-q", "--cov=app", "--cov-report=term-missing",
+                            uv,
+                            "run",
+                            "--locked",
+                            "--extra",
+                            "dev",
+                            "pytest",
+                            "tests",
+                            "-q",
+                            "--cov=app",
+                            "--cov-report=term-missing",
                             "--cov-fail-under=70",
                         ],
                     ),
@@ -204,8 +226,11 @@ class VerificationRunner:
                         pass
             else:
                 for name in (
-                    "Ruff lint", "Ruff format", "Mypy",
-                    "Backend tests and coverage", "Backend dependency audit",
+                    "Ruff lint",
+                    "Ruff format",
+                    "Mypy",
+                    "Backend tests and coverage",
+                    "Backend dependency audit",
                 ):
                     self.record_status(name, "⏭️ Skipped", "backend dependency sync failed")
 
@@ -226,8 +251,10 @@ class VerificationRunner:
                         pass
             else:
                 for name in (
-                    "Frontend typecheck", "Frontend production build",
-                    "Storybook build", "Frontend dependency audit",
+                    "Frontend typecheck",
+                    "Frontend production build",
+                    "Storybook build",
+                    "Frontend dependency audit",
                 ):
                     self.record_status(name, "⏭️ Skipped", "npm ci failed")
 
