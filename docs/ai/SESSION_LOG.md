@@ -150,3 +150,9 @@
 - Corrected stale research notes that still said dependency lockfiles had not been generated and Storybook compatibility was unverified. The current lockfiles are committed and locked installs plus the Storybook production build passed in CI.
 - Refreshed the Phase 0 verification report, traceability evidence, and project state to point at the latest successful CI run.
 - Remaining open gates are deliberately unchanged: Docker Compose and isolated SNMP lab runtime (deferred until final integration), browser/axe/keyboard/visual review, Windows full verification, and independent review. None is marked passed without evidence.
+
+## 2026-10-16 (WIB) — Triple-check Phase 0 browser and CI contracts
+
+- The PR check for Gitleaks failed with a 403 while the action queried `pulls/{number}/commits`. This is a GitHub token permission/configuration failure, not a Gitleaks secret finding. Added the minimum `pull-requests: read` permission and a static regression test for it.
+- Added an actual Chromium pass for the production-built UI using pinned Playwright 1.64.1 and @axe-core/playwright 4.14.0. It checks locale switching, keyboard focus, desktop/mobile overflow, non-fabricated metric placeholders, WCAG 2/2.1/2.2 AA violations, console errors, and captures screenshots as an artifact.
+- The test and report are pending the new CI results; no browser or accessibility pass is claimed until those results and screenshots are inspected.

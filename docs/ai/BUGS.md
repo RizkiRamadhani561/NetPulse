@@ -4,6 +4,7 @@
 
 | ID | Severity | Status | Summary | Evidence / next action |
 |---|---|---|---|---|
+| BUG-005 | Medium | Fix in review | Gitleaks Action failed on pull requests with HTTP 403 when listing pull-request commits because the job token did not have the `pull-requests: read` permission. The log did not report a leaked secret. | Added least-privilege `pull-requests: read` to the secrets job and a regression test. Close only after a pull-request Actions run passes. |
 | BUG-003 | Medium | Resolved | Storybook configuration and the dashboard-shell story passed the production build. | CI step Storybook production build succeeded in [run 38852063602](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38852063602). Visual browser/a11y inspection stays separately tracked as UX-04. |
 | BUG-004 | High | Deferred by user | Docker Compose smoke previously failed when Next.js 16.4 tried to write generated files into a host bind-mounted project directory. Compose now mounts source directories selectively, but runtime is unverified. | At the user's direction, defer Docker validation until the full system is built. Then manually dispatch the workflow, confirm web/API health and readiness assertions, and only then resolve. Previous failure: https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38803517944 |
 

@@ -1,5 +1,6 @@
 """Static safety contracts for the Phase 0 network lab and local preview."""
 
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -48,3 +49,23 @@ def test_default_lab_scenario_is_declarative_and_uses_lab_hosts() -> None:
     assert "http://lab-http:8080/health" in scenario
     assert "snmp-simulator:1161/udp" in scenario
     assert "execution is not implemented in Phase 0" in scenario
+
+
+
+def test_gitleaks_job_can_read_pull_request_metadata() -> None:
+    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    secrets_job = workflow.split("\n  secrets:\n", maxsplit=1)[1]
+    permissions = secrets_job.split("\n    steps:\n", maxsplit=1)[0]
+
+    assert "contents: read" in permissions
+    assert "pull-requests: read" in permissions
+    assert "security-events: write" in permissions
+
+
+def test_browser_audit_uses_pinned_tools_and_upload_action() -> None:
+    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+
+    assert '"@axe-core/playwright": "4.14.0"' in workflow
+    assert '"playwright": "1.64.1"' in workflow
+    assert "node scripts/verify_ui.cjs" in workflow
+    assert re.search(r"uses: actions/upload-artifact@[0-9a-f]{40}", workflow)

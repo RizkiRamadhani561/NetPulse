@@ -104,3 +104,11 @@ Sources: [Uptime Kuma](https://github.com/louislam/uptime-kuma), [LibreNMS dashb
 
 - The successful workflow run [38851350669](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851350669) reported these resolved action commits: checkout `d23441a48e516b6c34aea4fa41551a30e30af803`, setup-python `ece7cb06caefa5fff74198d8649806c4678c61a1`, setup-node `249970729cb0ef3589644e2896645e5dc5ba9c38`, and Gitleaks Action `e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e`.
 - **Decision:** pin these workflow references to their full commit SHAs to avoid mutable action tags. The action's `GITLEAKS_VERSION` is explicitly set to `8.30.1`, the latest release found at the time of review. See the [official action documentation](https://github.com/gitleaks/gitleaks-action/blob/master/README.md) for the supported environment variable. Revisit pins/version during controlled dependency updates.
+
+
+## 13. Phase 0 browser/a11y verification tools — 2026-10-16
+
+- **Playwright 1.64.1** is pinned as CI-only browser tooling. The test opens the built Next.js app in Chromium; it checks language switching, keyboard focus visibility, horizontal overflow at desktop/mobile widths, expected empty-state metrics, console/page failures, and saves screenshots.
+- **@axe-core/playwright 4.14.0** is pinned as CI-only accessibility tooling and audited separately before use. The audit targets WCAG 2 A/AA, WCAG 2.1 A/AA, and WCAG 2.2 AA rules on desktop Indonesian/English and mobile Indonesian layouts.
+- These checks do not need Docker: the frontend is tested from its production build. The screenshot artifact is evidence to inspect; it is not an automated aesthetic approval.
+- Sources: [Playwright CI documentation](https://playwright.dev/docs/ci), [@axe-core/playwright package and usage](https://www.npmjs.com/package/@axe-core/playwright), [GitHub Actions permission model](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax).

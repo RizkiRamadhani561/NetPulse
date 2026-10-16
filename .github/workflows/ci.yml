@@ -89,6 +89,41 @@ jobs:
         working-directory: frontend
         run: npm audit --audit-level=high
 
+      - name: Install pinned browser verification tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          tool_dir="$RUNNER_TEMP/netpulse-ui-tools"
+          mkdir -p "$tool_dir"
+          cat > "$tool_dir/package.json" <<'JSON'
+          {
+            "name": "netpulse-ui-verification",
+            "private": true,
+            "devDependencies": {
+              "@axe-core/playwright": "4.14.0",
+              "playwright": "1.64.1"
+            }
+          }
+          JSON
+          npm install --prefix "$tool_dir" --no-audit --no-fund --save-exact
+          npm audit --prefix "$tool_dir" --audit-level=high
+          "$tool_dir/node_modules/.bin/playwright" install --with-deps chromium
+
+      - name: Browser, keyboard, responsive, and accessibility checks
+        run: node scripts/verify_ui.cjs
+        env:
+          NODE_PATH: ${{ runner.temp }}/netpulse-ui-tools/node_modules
+          NETPULSE_UI_ARTIFACTS: ${{ runner.temp }}/netpulse-ui-artifacts
+
+      - name: Upload Phase 0 browser evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: phase0-ui-review-${{ github.run_id }}
+          path: ${{ runner.temp }}/netpulse-ui-artifacts/
+          if-no-files-found: warn
+          retention-days: 14
+
   container-smoke:
     name: Docker Compose smoke test
     if: github.event_name == 'workflow_dispatch'
@@ -133,6 +168,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: read
       security-events: write
     steps:
       - name: Check out source and history

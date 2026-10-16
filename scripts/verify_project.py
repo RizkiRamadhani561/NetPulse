@@ -33,6 +33,7 @@ REQUIRED_PATHS = (
     "scripts/verify.sh",
     "scripts/verify_runner.py",
     "backend/tests/test_foundation_contracts.py",
+    "scripts/verify_ui.cjs",
     "docker-compose.lab.yml",
     "lab/README.md",
     "lab/fixtures/oui-mini.csv",
