@@ -123,3 +123,9 @@
 - Confirmed the SHA-pinned workflow passed in [run 38851574192](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851574192).
 - Its action was using CLI 8.24.3 by default. Set the supported `GITLEAKS_VERSION` environment variable to `8.30.1`, the current release found in official Gitleaks release notes, so the secret scanner version is explicit and aligned with the reviewed tooling.
 - The new commit must pass secret scanning and the full regular CI again before being recorded as verified.
+
+## 2026-10-16 (WIB) — Use the same quick verification entry point in CI
+
+- The SHA-pinned workflow and explicit Gitleaks CLI version passed in [run 38851688869](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38851688869). Backend, frontend, Storybook, audit, and secret scanning passed; Compose remained intentionally skipped.
+- Updated the foundation job to call `bash ./scripts/verify.sh --quick` instead of invoking the underlying structural checker directly. CI and local quick verification now go through the same documented entry point.
+- The change triggers a final regular CI rerun; the reported phase status will use that run.

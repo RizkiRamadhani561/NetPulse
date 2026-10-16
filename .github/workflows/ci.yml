@@ -32,8 +32,8 @@ jobs:
         working-directory: backend
         run: uv sync --locked --extra dev
 
-      - name: Verify structure
-        run: python scripts/verify_project.py --mode quick
+      - name: Quick verification gate
+        run: bash ./scripts/verify.sh --quick
 
       - name: Ruff lint
         working-directory: backend
