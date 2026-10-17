@@ -24,10 +24,7 @@ REQUIRED_FILES = (
     "assets/brand/login-background.svg",
     "assets/brand/topology-pattern.svg",
 )
-TRANSIENT_ASSET_PATTERNS = (
-    re.compile(r"media\\.canva\\.com/.{0,100}(?:token=|watermark)", re.IGNORECASE),
-    re.compile(r"https?://www?\\.canva\\.com/M/", re.IGNORECASE),
-)
+CANVA_REFERENCE = re.compile(r"canva\.com|media\.canva\.com", re.IGNORECASE)
 
 
 class PageParser(HTMLParser):
@@ -56,8 +53,6 @@ def resolve_local_reference(root: Path, ref: str, source: Path) -> Path | None:
     if parsed.scheme or parsed.netloc or not parsed.path:
         return None
     target_path = parsed.path
-    if target_path.startswith("/"):
-        return None
     if target_path in (".", "./", ""):
         target_path = "index.html"
     candidate = (source.parent / target_path).resolve()
@@ -110,13 +105,13 @@ def main() -> int:
     if js_path.is_file():
         js = js_path.read_text(encoding="utf-8")
         for key in sorted(translation_keys):
-            if not re.search(r"\\b" + re.escape(key) + r"\\s*:", js):
+            if not re.search(r"\b" + re.escape(key) + r"\s*:", js):
                 errors.append(f"Missing translation key in site.js: {key}")
 
     css_path = root / "styles.css"
     if css_path.is_file():
         css = css_path.read_text(encoding="utf-8")
-        for raw in re.findall(r"url\\(\\s*['\"]?([^'\"\\)]+)", css):
+        for raw in re.findall(r"url\(\s*['\"]?([^'\")]+)", css):
             ref = raw.strip()
             if ref.startswith(("data:", "http:", "https:", "#")):
                 continue
@@ -132,12 +127,11 @@ def main() -> int:
         except (ET.ParseError, OSError) as exc:
             errors.append(f"Invalid SVG {svg_path.relative_to(root)}: {exc}")
 
-    for pattern in TRANSIENT_ASSET_PATTERNS:
-        for path in root.rglob("*"):
-            if path.is_file() and path.suffix.lower() in {".html", ".css", ".js", ".xml", ".txt", ".svg"}:
-                text = path.read_text(encoding="utf-8", errors="replace")
-                if pattern.search(text):
-                    errors.append(f"Transient Canva URL or thumbnail reference found in {path.relative_to(root)}")
+    for path in root.rglob("*"):
+        if path.is_file() and path.suffix.lower() in {".html", ".css", ".js", ".xml", ".txt", ".svg"}:
+            text = path.read_text(encoding="utf-8", errors="replace")
+            if CANVA_REFERENCE.search(text):
+                errors.append(f"External Canva or expiring thumbnail reference found in {path.relative_to(root)}")
 
     sitemap = root / "sitemap.xml"
     if sitemap.is_file():
