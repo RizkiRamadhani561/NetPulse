@@ -4,11 +4,13 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 const { spawn } = require("node:child_process");
-const { chromium } = require("playwright");
-const AxeBuilder = require("@axe-core/playwright").default;
+const { createRequire } = require("node:module");
 
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
+const frontendRequire = createRequire(path.join(FRONTEND, "package.json"));
+const { chromium } = frontendRequire("playwright");
+const AxeBuilder = frontendRequire("@axe-core/playwright").default;
 const ARTIFACTS =
   process.env.NETPULSE_UI_ARTIFACTS || path.join(os.tmpdir(), "netpulse-ui-artifacts");
 const BASE_URL = process.env.NETPULSE_UI_BASE_URL || "http://127.0.0.1:3100";
@@ -105,7 +107,10 @@ async function main() {
   let browser;
   try {
     await waitForServer(BASE_URL);
-    browser = await chromium.launch({ headless: true });
+    browser = await chromium.launch({
+      headless: true,
+      executablePath: process.env.NETPULSE_CHROMIUM_EXECUTABLE,
+    });
 
     console.log("[ui-audit] Chromium launched");
     const desktop = await browser.newPage({
