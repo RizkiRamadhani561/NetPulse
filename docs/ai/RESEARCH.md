@@ -112,3 +112,11 @@ Sources: [Uptime Kuma](https://github.com/louislam/uptime-kuma), [LibreNMS dashb
 - **@axe-core/playwright 4.14.0** is pinned as CI-only accessibility tooling and audited separately before use. The audit targets WCAG 2 A/AA, WCAG 2.1 A/AA, and WCAG 2.2 AA rules on desktop Indonesian/English and mobile Indonesian layouts.
 - These checks do not need Docker: the frontend is tested from its production build. The screenshot artifact is evidence to inspect; it is not an automated aesthetic approval.
 - Sources: [Playwright CI documentation](https://playwright.dev/docs/ci), [@axe-core/playwright package and usage](https://www.npmjs.com/package/@axe-core/playwright), [GitHub Actions permission model](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax).
+
+
+## 14. AUTH-01 persistence and password hashing — 2026-10-16
+
+- **Alembic 1.20.0:** Official Alembic documentation identifies it as the lightweight migration tool for SQLAlchemy and documents SQLite batch migrations. It is required by the database/migration architecture in `docs/spec/08-desain-database.md`. Project metadata reports the MIT license.
+- **argon2-cffi 25.1.0:** The official documentation provides the maintained Python interface to Argon2 and its password-hashing API. It fulfils the explicit authentication requirement in `docs/spec/10-keamanan-sangat-penting.md`. Project metadata reports the MIT license.
+- **tzdata 2026.5:** Python's `zoneinfo` needs an IANA timezone data source. The official `tzdata` package supplies the fallback for systems without system timezone data, which applies to this Windows development environment. It is maintained by the Python Software Foundation and licensed Apache-2.0, compatible with NetPulse's MIT license.
+- All three direct runtime dependencies were resolved by `uv lock`; no lockfile metadata was written manually.

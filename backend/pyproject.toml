@@ -17,9 +17,12 @@ classifiers = [
   "Topic :: System :: Networking :: Monitoring",
 ]
 dependencies = [
+  "alembic==1.20.0",
+  "argon2-cffi==25.1.0",
   "fastapi==0.143.2",
   "uvicorn[standard]>=0.35,<1.0",
   "sqlalchemy==2.1.4",
+  "tzdata==2026.5",
 ]
 
 [project.optional-dependencies]

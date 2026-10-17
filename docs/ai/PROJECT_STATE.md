@@ -4,8 +4,8 @@ Last updated: 2026-10-16 (WIB)
 
 ## Current position
 
-- **Phase:** 0 — Foundation
-- **Implementation status:** ✅ Foundation implementation is in place and regular non-container CI is green. Formal integration/release gates remain explicitly open.
+- **Phase:** 1 — MVP (checkpoint AUTH-02)
+- **Implementation status:** ⚠️ Phase 0 continuation approval was explicitly granted on 2026-10-16 (WIB). AUTH-01 backend persistence/API and its browser error-state wizard shell are verified locally; AUTH-02 has a verified session-login foundation. Telegram connection, first-device/demo actions, login UI, rate limiting, and lockout remain pending. Formal integration/release gates remain explicitly open.
 - **Repository:** RizkiRamadhani561/NetPulse, private, default branch main.
 - **Latest regular CI:** [Run 38852297612](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38852297612), commit 8fe85e8. All three required jobs passed: foundation/backend, frontend build/audit, secret scanning.
 - **Coverage:** 7 backend tests passed with warnings-as-errors; current backend app module has 100% coverage of 10 statements, above the enforced 70% floor.
@@ -42,7 +42,7 @@ Last updated: 2026-10-16 (WIB)
 - npm ci, TypeScript, Next.js production build, Storybook production build, npm audit: pass; npm audit found 0 vulnerabilities.
 - Secret scan: pass; Gitleaks 8.30.1 output says no leaks found.
 - Docker Compose job: skipped as configured. Do not count as passed.
-- The local PowerShell full runner, browser screenshots/axe/keyboard review, SNMP simulator runtime, and independent reviewer have not been run.
+- The local PowerShell full runner, SNMP simulator runtime, and independent reviewer have not been run. The production-built setup error state has browser screenshots, axe, keyboard, and responsive-overflow evidence; happy-path setup E2E remains pending.
 
 ## Remaining gates and known blockers
 
@@ -58,4 +58,4 @@ The foundation implementation and automated non-container checks are complete. A
 
 ## Next step
 
-Present the Phase 0 report for review and wait for approval before beginning Phase 1. Keep all deferred runtime/UI/review gates visible in the project state.
+Finish the AUTH-02 rate-limit/lockout and login UI checkpoint, then continue the Phase 1 IDs in traceability order. Preserve the deferred runtime/UI/review gates and work one feature checkpoint at a time.

@@ -20,14 +20,14 @@ def test_health_endpoint_reports_liveness() -> None:
     assert response.json() == {"status": "ok", "service": "netpulse-api"}
 
 
-def test_ready_endpoint_does_not_claim_readiness_before_dependencies_exist() -> None:
+def test_ready_endpoint_reports_database_but_not_scheduler_readiness() -> None:
     response = asyncio.run(get_response("/api/v1/ready"))
 
     assert response.status_code == 503
     assert response.json() == {
         "status": "not_ready",
         "checks": {
-            "database": "not_configured",
+            "database": "ready",
             "scheduler": "not_started",
         },
     }

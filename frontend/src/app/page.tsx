@@ -1,5 +1,5 @@
-import { DashboardShell } from "@/components/dashboard-shell";
+import { SetupWizard } from "@/components/setup-wizard";
 
 export default function HomePage() {
-  return <DashboardShell />;
+  return <SetupWizard />;
 }

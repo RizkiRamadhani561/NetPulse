@@ -16,6 +16,15 @@ def test_default_services_only_publish_ports_on_loopback() -> None:
     assert not any(line.strip() == "- ./frontend:/app" for line in compose.splitlines())
 
 
+def test_read_only_api_persists_sqlite_only_in_the_named_data_volume() -> None:
+    compose = (ROOT / "docker-compose.yml").read_text(encoding="utf-8")
+
+    api_service = compose.split("  api:\n", maxsplit=1)[1].split("\n  web:", maxsplit=1)[0]
+    assert "read_only: true" in api_service
+    assert "DATABASE_URL: ${DATABASE_URL:-sqlite:///./data/netpulse.db}" in api_service
+    assert "- netpulse_data:/app/data" in api_service
+
+
 def test_lab_overlay_is_internal_and_has_no_published_ports() -> None:
     overlay = (ROOT / "docker-compose.lab.yml").read_text(encoding="utf-8")
 

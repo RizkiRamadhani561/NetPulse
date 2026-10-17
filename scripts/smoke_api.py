@@ -83,7 +83,7 @@ def main() -> int:
                 if status != 503 or ready_payload != {
                     "status": "not_ready",
                     "checks": {
-                        "database": "not_configured",
+                        "database": "ready",
                         "scheduler": "not_started",
                     },
                 }:

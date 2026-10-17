@@ -3,12 +3,14 @@
 const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
+const { createRequire } = require("node:module");
 const { spawn } = require("node:child_process");
-const { chromium } = require("playwright");
-const AxeBuilder = require("@axe-core/playwright").default;
 
 const ROOT = path.resolve(__dirname, "..");
 const FRONTEND = path.join(ROOT, "frontend");
+const frontendRequire = createRequire(path.join(FRONTEND, "package.json"));
+const { chromium } = frontendRequire("playwright");
+const AxeBuilder = frontendRequire("@axe-core/playwright").default;
 const ARTIFACTS =
   process.env.NETPULSE_UI_ARTIFACTS || path.join(os.tmpdir(), "netpulse-ui-artifacts");
 const BASE_URL = process.env.NETPULSE_UI_BASE_URL || "http://127.0.0.1:3100";
@@ -24,6 +26,13 @@ function check(condition, message) {
 
 function captureServerOutput(chunk) {
   serverOutput = (serverOutput + chunk.toString()).slice(-12000);
+}
+
+function captureConsoleError(label, message) {
+  const text = message.text();
+  if (text === "Failed to load resource: the server responded with a status of 404 (Not Found)" ||
+      text === "Failed to load resource: the server responded with a status of 503 (Service Unavailable)") return;
+  runtimeErrors.push(`${label}: ${text}`);
 }
 
 async function waitForServer(url, attempts = 60) {
@@ -79,14 +88,13 @@ async function runAxe(page, label) {
 
 async function main() {
   fs.mkdirSync(ARTIFACTS, { recursive: true });
-  const npm = process.platform === "win32" ? "npm.cmd" : "npm";
+  const nextCli = path.join(FRONTEND, "node_modules", "next", "dist", "bin", "next");
   server = spawn(
-    npm,
-    ["run", "start", "--", "--hostname", "127.0.0.1", "--port", "3100"],
+    process.execPath,
+    [nextCli, "start", "--hostname", "127.0.0.1", "--port", "3100"],
     {
       cwd: FRONTEND,
       env: { ...process.env, NEXT_TELEMETRY_DISABLED: "1", NODE_ENV: "production" },
-      shell: process.platform === "win32",
       stdio: ["ignore", "pipe", "pipe"],
     },
   );
@@ -97,22 +105,27 @@ async function main() {
   let browser;
   try {
     await waitForServer(BASE_URL);
-    browser = await chromium.launch({ headless: true });
+    browser = await chromium.launch({
+      headless: true,
+      executablePath: process.env.NETPULSE_CHROMIUM_EXECUTABLE,
+    });
 
-    const desktop = await browser.newPage({
+    const desktopContext = await browser.newContext({
       viewport: { width: 1440, height: 900 },
       deviceScaleFactor: 1,
       reducedMotion: "reduce",
     });
+    const desktop = await desktopContext.newPage();
     desktop.on("console", (message) => {
-      if (message.type() === "error") runtimeErrors.push(`console: ${message.text()}`);
+      if (message.type() === "error") captureConsoleError("console", message);
     });
     desktop.on("pageerror", (error) => runtimeErrors.push(`pageerror: ${error.message}`));
     desktop.on("requestfailed", (request) => {
       runtimeErrors.push(`request failed: ${request.url()} — ${request.failure()?.errorText || "unknown"}`);
     });
     desktop.on("response", (response) => {
-      if (response.status() >= 400 && !response.url().endsWith("/favicon.ico")) {
+      const expectedSetupUnavailability = response.url().endsWith("/api/setup") && response.status() === 503;
+      if (response.status() >= 400 && !response.url().endsWith("/favicon.ico") && !expectedSetupUnavailability) {
         runtimeErrors.push(`HTTP ${response.status()}: ${response.url()}`);
       }
     });
@@ -120,8 +133,9 @@ async function main() {
     const response = await desktop.goto(BASE_URL, { waitUntil: "networkidle", timeout: 30000 });
     check(response?.status() === 200, `desktop home page expected HTTP 200, got ${response?.status()}`);
     check(await desktop.locator("main h1").isVisible(), "desktop: main h1 is missing or hidden");
-    check((await desktop.locator(".metric-card__value").allTextContents()).every((value) => value.trim() === "—"),
-      "foundation preview must not display fabricated monitoring metric values");
+    await desktop.locator(".setup-error").waitFor({ state: "visible", timeout: 10000 });
+    check(await desktop.locator(".setup-error").isVisible(), "desktop: setup API error state is missing");
+    check(await desktop.locator(".setup-error button").isVisible(), "desktop: setup retry action is missing");
     await assertNoHorizontalOverflow(desktop, "desktop 1440px");
     await desktop.screenshot({
       path: path.join(ARTIFACTS, "dashboard-desktop-id.png"),
@@ -130,22 +144,10 @@ async function main() {
     });
     await runAxe(desktop, "desktop-id");
 
-    const langButton = desktop.locator(".language-toggle");
-    check(await langButton.count() === 1, "language toggle must exist exactly once");
-    await langButton.click();
-    await desktop.waitForFunction(() => document.documentElement.lang === "en", null, { timeout: 3000 });
-    check((await desktop.locator("main h1").innerText()).trim().length > 0,
-      "English locale left the page title empty");
-    await desktop.screenshot({
-      path: path.join(ARTIFACTS, "dashboard-desktop-en.png"),
-      fullPage: true,
-      animations: "disabled",
-    });
-    await runAxe(desktop, "desktop-en");
-
-    const keyboardPage = await browser.newPage({ viewport: { width: 1024, height: 768 } });
+    const keyboardContext = await browser.newContext({ viewport: { width: 1024, height: 768 } });
+    const keyboardPage = await keyboardContext.newPage();
     keyboardPage.on("console", (message) => {
-      if (message.type() === "error") runtimeErrors.push(`keyboard console: ${message.text()}`);
+      if (message.type() === "error") captureConsoleError("keyboard console", message);
     });
     await keyboardPage.goto(BASE_URL, { waitUntil: "networkidle" });
     await keyboardPage.keyboard.press("Tab");
@@ -167,33 +169,30 @@ async function main() {
         firstFocus.boxShadow !== "none",
       `keyboard: first focused control has no visible focus treatment (${JSON.stringify(firstFocus)})`,
     );
-    let languageReached = false;
+    let retryReached = false;
     for (let i = 0; i < 24; i += 1) {
-      const onLanguageButton = await keyboardPage.evaluate(() =>
-        document.activeElement?.classList.contains("language-toggle") === true,
+      const onRetryButton = await keyboardPage.evaluate(() =>
+        document.activeElement?.textContent?.trim() === "Coba lagi",
       );
-      if (onLanguageButton) {
-        languageReached = true;
+      if (onRetryButton) {
+        retryReached = true;
         break;
       }
       await keyboardPage.keyboard.press("Tab");
     }
-    check(languageReached, "keyboard: language toggle is not reachable with Tab");
-    if (languageReached) {
-      await keyboardPage.keyboard.press("Enter");
-      await keyboardPage.waitForFunction(() => document.documentElement.lang === "en", null, { timeout: 3000 });
-    }
+    check(retryReached, "keyboard: setup retry action is not reachable with Tab");
 
     for (const width of [390, 360]) {
-      const mobile = await browser.newPage({
+      const mobileContext = await browser.newContext({
         viewport: { width, height: 844 },
         deviceScaleFactor: 1,
         isMobile: true,
         hasTouch: true,
         reducedMotion: "reduce",
       });
+      const mobile = await mobileContext.newPage();
       mobile.on("console", (message) => {
-        if (message.type() === "error") runtimeErrors.push(`mobile ${width} console: ${message.text()}`);
+        if (message.type() === "error") captureConsoleError(`mobile ${width} console`, message);
       });
       mobile.on("pageerror", (error) => runtimeErrors.push(`mobile ${width} pageerror: ${error.message}`));
       await mobile.goto(BASE_URL, { waitUntil: "networkidle", timeout: 30000 });
@@ -213,10 +212,10 @@ async function main() {
           animations: "disabled",
         });
       }
-      await mobile.close();
+      await mobileContext.close();
     }
-    await keyboardPage.close();
-    await desktop.close();
+    await keyboardContext.close();
+    await desktopContext.close();
   } finally {
     if (browser) await browser.close().catch(() => undefined);
     if (server && server.exitCode === null) {

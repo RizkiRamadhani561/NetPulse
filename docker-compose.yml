@@ -8,9 +8,12 @@ services:
     environment:
       APP_ENV: ${APP_ENV:-development}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      DATABASE_URL: ${DATABASE_URL:-sqlite:///./data/netpulse.db}
     ports:
       - "127.0.0.1:8000:8000"
     read_only: true
+    volumes:
+      - netpulse_data:/app/data
     tmpfs:
       - /tmp:rw,noexec,nosuid,size=32m
     cap_drop:
