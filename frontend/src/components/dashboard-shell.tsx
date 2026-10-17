@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import en from "@/messages/en.json";
 import id from "@/messages/id.json";
 
@@ -12,7 +13,7 @@ const messages: Record<Language, Copy> = { id, en };
 function PulseMark() {
   return (
     <span className="brand-mark" aria-hidden="true">
-      <img src="/brand/netpulse-mark.svg" width={35} height={35} alt="" />
+      <Image src="/brand/netpulse-mark.svg" width={35} height={35} alt="" unoptimized />
     </span>
   );
 }
