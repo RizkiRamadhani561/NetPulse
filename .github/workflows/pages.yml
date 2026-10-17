@@ -47,6 +47,7 @@ jobs:
           test -s _site/assets/brand/favicon.svg
           test -s _site/assets/brand/github-banner.svg
           test -s _site/assets/brand/login-background.svg
+          python scripts/verify_site.py --root _site
           if grep -RInE 'canva\.com/.+watermark|media\.canva\.com/.+token=' _site; then
             echo "A transient Canva preview URL was found in the static artifact." >&2
             exit 1
