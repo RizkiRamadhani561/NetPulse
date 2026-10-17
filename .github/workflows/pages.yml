@@ -1,0 +1,68 @@
+name: Publish project site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/site/**"
+      - "frontend/public/brand/**"
+      - "docs/BRAND_GUIDELINES.md"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Assemble static site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+
+      - name: Assemble Pages artifact
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          rm -rf _site
+          mkdir -p _site/assets/brand
+          cp -R docs/site/. _site/
+          cp -R frontend/public/brand/. _site/assets/brand/
+          test -s _site/index.html
+          test -s _site/docs.html
+          test -s _site/styles.css
+          test -s _site/site.js
+          test -s _site/assets/brand/netpulse-mark.svg
+          test -s _site/assets/brand/netpulse-logo.svg
+          test -s _site/assets/brand/favicon.svg
+          test -s _site/assets/brand/github-banner.svg
+          test -s _site/assets/brand/login-background.svg
+          if grep -RInE 'canva\.com/.+watermark|media\.canva\.com/.+token=' _site; then
+            echo "A transient Canva preview URL was found in the static artifact." >&2
+            exit 1
+          fi
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy Pages artifact
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346
