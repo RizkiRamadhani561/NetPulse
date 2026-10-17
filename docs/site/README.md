@@ -33,3 +33,4 @@ Public copy distinguishes the current Phase 0 foundation from planned work. Do n
 - styles.css — shared responsive design system, dark/light theme tokens, and mobile rules.
 - site.js — language/theme toggles. Preference storage is optional and guarded.
 - assets/brand/ — copied from frontend/public/brand during the Pages build.
+- scripts/verify_site.py — checks required assets, local references, translation keys, SVG/XML syntax, and accidental Canva preview URLs in CI.
