@@ -27,10 +27,14 @@ function captureServerOutput(chunk) {
 }
 
 async function waitForServer(url, attempts = 60) {
+  console.log(`[ui-audit] Waiting for production server at ${url}`);
   for (let attempt = 0; attempt < attempts; attempt += 1) {
     try {
       const response = await fetch(url, { signal: AbortSignal.timeout(2000) });
-      if (response.ok) return;
+      if (response.ok) {
+        console.log("[ui-audit] Production server is ready");
+        return;
+      }
     } catch {
       // The production server takes a moment to bind the local port.
     }
@@ -52,6 +56,7 @@ async function assertNoHorizontalOverflow(page, widthLabel) {
 }
 
 async function runAxe(page, label) {
+  console.log(`[ui-audit] axe started: ${label}`);
   const result = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22a", "wcag22aa"])
     .analyze();
@@ -70,6 +75,7 @@ async function runAxe(page, label) {
       })),
     })),
   });
+  console.log(`[ui-audit] axe finished: ${label}; passes=${result.passes.length}; violations=${result.violations.length}; incomplete=${result.incomplete.length}`);
   for (const violation of result.violations) {
     failures.push(
       `${label}: axe ${violation.impact || "unknown"} violation ${violation.id} — ${violation.help} (${violation.nodes.length} node(s))`,
@@ -79,6 +85,7 @@ async function runAxe(page, label) {
 
 async function main() {
   fs.mkdirSync(ARTIFACTS, { recursive: true });
+  console.log(`[ui-audit] Starting browser audit. Artifacts: ${ARTIFACTS}`);
   const npm = process.platform === "win32" ? "npm.cmd" : "npm";
   server = spawn(
     npm,
@@ -99,6 +106,7 @@ async function main() {
     await waitForServer(BASE_URL);
     browser = await chromium.launch({ headless: true });
 
+    console.log("[ui-audit] Chromium launched");
     const desktop = await browser.newPage({
       viewport: { width: 1440, height: 900 },
       deviceScaleFactor: 1,
@@ -118,6 +126,7 @@ async function main() {
     });
 
     const response = await desktop.goto(BASE_URL, { waitUntil: "networkidle", timeout: 30000 });
+    console.log(`[ui-audit] Desktop Indonesian navigation finished; HTTP ${response?.status()}`);
     check(response?.status() === 200, `desktop home page expected HTTP 200, got ${response?.status()}`);
     check(await desktop.locator("main h1").isVisible(), "desktop: main h1 is missing or hidden");
 
@@ -157,6 +166,7 @@ async function main() {
     });
     await runAxe(desktop, "desktop-id");
 
+    console.log("[ui-audit] Desktop Indonesian assertions and axe completed");
     const langButton = desktop.locator(".language-toggle");
     check(await langButton.count() === 1, "language toggle must exist exactly once");
     await langButton.click();
@@ -170,6 +180,7 @@ async function main() {
     });
     await runAxe(desktop, "desktop-en");
 
+    console.log("[ui-audit] Desktop English assertions and axe completed");
     const keyboardPage = await browser.newPage({ viewport: { width: 1024, height: 768 } });
     keyboardPage.on("console", (message) => {
       if (message.type() === "error") runtimeErrors.push(`keyboard console: ${message.text()}`);
@@ -214,7 +225,9 @@ async function main() {
       await keyboardPage.waitForFunction(() => document.documentElement.lang === "en", null, { timeout: 3000 });
     }
 
+    console.log("[ui-audit] Keyboard-only checks completed");
     for (const width of [390, 360]) {
+      console.log(`[ui-audit] Starting responsive checks at ${width}px`);
       const mobile = await browser.newPage({
         viewport: { width, height: 844 },
         deviceScaleFactor: 1,
@@ -243,8 +256,10 @@ async function main() {
           animations: "disabled",
         });
       }
+      console.log(`[ui-audit] Responsive and screenshot checks completed at ${width}px`);
       await mobile.close();
     }
+    console.log("[ui-audit] All viewport checks completed");
     await keyboardPage.close();
     await desktop.close();
   } finally {
