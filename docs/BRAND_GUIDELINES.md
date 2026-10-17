@@ -19,7 +19,7 @@ Avoid neon glow, chrome or metallic effects, fake glass, heavy gradients, overdr
 | Off-white | #F8FAFC | Clear details on dark surfaces |
 | Slate | #334155 / #64748B | Grids, routes, secondary lines |
 
-The existing application shell already has its own dark-theme tokens. Brand integration should harmonize with them, not repaint every dashboard surface or reduce contrast to force a perfect match.
+The existing application shell keeps its established dark surface tokens; its teal accent has been aligned with the primary brand teal. Keep contrast and existing layout hierarchy intact instead of repainting every dashboard surface just to force a perfect match.
 
 ## Canonical asset inventory
 
