@@ -1,6 +1,6 @@
 # Project State — NetPulse
 
-Last updated: 2026-10-16 (WIB)
+Last updated: 2026-10-17 (WIB)
 
 ## Current position
 
@@ -59,3 +59,12 @@ The foundation implementation and automated non-container checks are complete. A
 ## Next step
 
 Present the Phase 0 report for review and wait for approval before beginning Phase 1. Keep all deferred runtime/UI/review gates visible in the project state.
+
+
+## Brand and public project site — 2026-10-17
+
+- A focused feature branch, `feat/brand-assets-github-pages`, contains canonical SVG assets under `frontend/public/brand/`, app favicon/theme metadata, dashboard mark integration, a static project landing page and documentation overview under `docs/site/`, brand guidance, and a Pages workflow.
+- These SVG assets are hand-authored vector implementations following the chosen navy/teal direction. They are not byte-for-byte Canva exports: the connected Canva service exposed only watermarked, short-lived thumbnails, not the downloadable original image bytes. See `docs/BRAND_GUIDELINES.md`.
+- The login background is prepared for future AUTH work, but no login route or authentication was added. Keep the current preview free of a fake login form.
+- The GitHub Pages site is not considered published until the feature branch is reviewed/merged, the repository Pages source is set to GitHub Actions, and the Pages workflow succeeds.
+- Verification status for the new branch changes: ❓ not yet verified by a local frontend build or browser/accessibility run. The existing Phase 0 deferred Docker integration, full visual review, and independent review remain open.
