@@ -2,7 +2,7 @@
 
 ![NetPulse brand banner](frontend/public/brand/github-banner.svg)
 
-[Situs proyek](https://rizkiramadhani561.github.io/NetPulse/) · [Ikhtisar dokumentasi](docs/site/docs.html) · [Panduan brand](docs/BRAND_GUIDELINES.md)
+[Situs proyek](https://rizkiramadhani561.github.io/NetPulse/) · [Ikhtisar dokumentasi](https://rizkiramadhani561.github.io/NetPulse/docs.html) · [Panduan brand](docs/BRAND_GUIDELINES.md)
 
 **Feel the pulse of your network.**
 
