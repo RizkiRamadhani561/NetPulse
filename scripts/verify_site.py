@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import argparse
-from html.parser import HTMLParser
-from pathlib import Path
 import re
 import sys
-from urllib.parse import urlsplit
 import xml.etree.ElementTree as ET
+from html.parser import HTMLParser
+from pathlib import Path
+from urllib.parse import urlsplit
 
 
 REQUIRED_FILES = (
