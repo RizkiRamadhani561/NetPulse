@@ -9,13 +9,17 @@ export const metadata: Metadata = {
   description:
     "A self-hosted, beginner-friendly network monitoring dashboard. Phase 0 preview.",
   applicationName: "NetPulse",
+  icons: {
+    icon: "/brand/favicon.svg",
+    shortcut: "/brand/favicon.svg",
+  },
   robots: { index: false, follow: false },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0b1115",
+  themeColor: "#0B1220",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
