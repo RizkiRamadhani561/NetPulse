@@ -195,5 +195,5 @@
 ### UI PR verification follow-up — 2026-10-17
 
 - First PR CI run exposed a Ruff `I001` import-order failure in `scripts/verify_project.py`; the failure occurs in the existing repository verifier, before backend unit/type/audit stages.
-- Reordered the standard-library import block to match Ruff's reported import sorting rules. No check or lint rule was disabled.
+- Applied the exact ordering shown by Ruff's suggested diff (plain imports first, then `from pathlib import Path`). An initial alternate ordering still failed, so the change now follows the checker's concrete output. No check or lint rule was disabled.
 - Re-run of PR CI is required before the change can be considered green. The UI PR remains open; Docker runtime stays deferred under ADR-006.
