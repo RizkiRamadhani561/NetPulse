@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rizkiramadhani561.github.io/NetPulse/sitemap.xml

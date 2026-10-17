@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">NetPulse topology mark</title>
+  <rect width="64" height="64" rx="17" fill="#0B1220"/>
+  <path d="M14 18h15v13h17M14 46h15V31M29 31h17v15" fill="none" stroke="#64748B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M13 34h8l4-8 6 15 4-9h18" fill="none" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="14" cy="18" r="3" fill="#F8FAFC"/>
+  <circle cx="46" cy="18" r="3" fill="#14B8A6"/>
+  <circle cx="14" cy="46" r="3" fill="#14B8A6"/>
+  <circle cx="46" cy="46" r="3" fill="#F8FAFC"/>
+</svg>

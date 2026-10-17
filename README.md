@@ -1,5 +1,9 @@
 # NetPulse
 
+![NetPulse brand banner](frontend/public/brand/github-banner.svg)
+
+[Project site](https://rizkiramadhani561.github.io/NetPulse/) · [Documentation overview](https://rizkiramadhani561.github.io/NetPulse/docs.html) · [Brand guidelines](docs/BRAND_GUIDELINES.md)
+
 **Feel the pulse of your network.**
 
 NetPulse is an early-stage, self-hosted network-monitoring dashboard for home labs, small offices, schools, and IT support teams. The goal is to make useful network checks easier to set up and understand, without needing a large monitoring stack from day one.

@@ -1,5 +1,9 @@
 # NetPulse
 
+![NetPulse brand banner](frontend/public/brand/github-banner.svg)
+
+[Situs proyek](https://rizkiramadhani561.github.io/NetPulse/) · [Ikhtisar dokumentasi](https://rizkiramadhani561.github.io/NetPulse/docs.html) · [Panduan brand](docs/BRAND_GUIDELINES.md)
+
 **Feel the pulse of your network.**
 
 NetPulse dirancang sebagai dashboard monitoring jaringan yang ringan dan self-hosted untuk home lab, kantor kecil, sekolah, dan tim IT support. Targetnya mencakup pengecekan uptime/latensi, metrik SNMP, discovery, riwayat insiden, dan notifikasi Telegram dengan pemasangan yang mudah dipahami pemula.
