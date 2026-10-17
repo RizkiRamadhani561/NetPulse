@@ -18,7 +18,7 @@ Then open http://localhost:8001. The temporary preview folder is generated local
 
 The workflow at .github/workflows/pages.yml assembles the site and canonical vector assets, then uploads the deploy artifact to GitHub Pages. It runs on changes merged to main or by manual dispatch. It does not publish the Next.js app itself: GitHub Pages hosts only this static project site and docs overview.
 
-Before the first deployment, a repository administrator must open **Settings → Pages** and choose **GitHub Actions** under **Build and deployment → Source**. That repository setting cannot be changed by the source workflow. After the workflow succeeds, check the Actions run summary and the repository Pages environment for the published URL.
+On a push to main or a manual workflow dispatch, the workflow uses the official configure-pages action with its enablement option to request GitHub Pages setup automatically. Pull requests only assemble and validate the site; they do not publish it. If repository policy, plan restrictions, or token permissions prevent automatic enablement, a repository administrator must open **Settings → Pages**, choose **GitHub Actions** under **Build and deployment → Source**, and rerun the workflow. After deployment succeeds, check the Actions run summary and the repository Pages environment for the published URL.
 
 Expected URL: https://rizkiramadhani561.github.io/NetPulse/
 
