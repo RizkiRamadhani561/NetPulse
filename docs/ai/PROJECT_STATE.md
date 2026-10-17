@@ -1,6 +1,6 @@
 # Project State — NetPulse
 
-Last updated: 2026-10-16 (WIB)
+Last updated: 2026-10-17 (WIB)
 
 ## Current position
 
@@ -22,6 +22,14 @@ Last updated: 2026-10-16 (WIB)
 - Compose runtime smoke is held until the full system is built; this is a deferral, not a passing test.
 - Keep the repository private.
 - Commit/push of foundation and verification fixes is authorized; do not change visibility or other remote settings without approval.
+
+## UI refresh — 2026-10-17
+
+- The dashboard UI refresh is being prepared on branch `feat/netpulse-ui-ux-refresh`; it keeps Phase 0 preview semantics and does not implement monitoring features.
+- Visual baseline: Space Grotesk for headings, Inter for body copy, IBM Plex Mono for technical labels; teal `#54D8B6` remains the primary accent and `#D93A2F` is reserved for critical/destructive states.
+- Focus navigation, reduced-motion behavior, subdued surfaces, and preview-only empty states are retained; the browser contract now checks typography tokens, critical tokens, planned controls, and keyboard skip navigation.
+- **Verification status:** the branch build, browser/axe audit, screenshot review, and CI results are pending. Do not close UX-04 until the new artifacts and checks have been inspected.
+- **Remote visibility discrepancy:** current GitHub repository metadata reports `public`, while earlier project state said private. No visibility or other repository setting was changed as part of this UI task.
 
 ## Current implementation
 
