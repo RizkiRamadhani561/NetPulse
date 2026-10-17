@@ -182,3 +182,12 @@
 - Ran frontend typecheck: passed.
 - Pushed updated `main` branch to GitHub remote `origin/main`.
 
+## 2026-10-17 (WIB) — Apply the selected NetPulse UI system
+
+- Started the dashboard refresh on `feat/netpulse-ui-ux-refresh` from the latest observed `main` commit, keeping this work isolated from `main`.
+- Implemented the approved font pairing (Space Grotesk headings, Inter body, IBM Plex Mono technical labels) through `next/font/google`, so font assets are bundled at build time rather than requested by the browser from a third-party host.
+- Aligned the dashboard's visual tokens with the Figma direction: quiet slate surfaces, `#54D8B6` teal accent, amber warnings, and `#D93A2F` critical/destructive token with `#FF8B80` text.
+- Added restrained enter/hover transitions with a `prefers-reduced-motion` fallback; removed non-functional chevrons from static preview elements, added a skip-to-main keyboard link, and corrected the setup counter to `1/4`.
+- Extended the production browser check for typography/status tokens, preview-only planned navigation, setup progress, and keyboard skip navigation. Existing locale, empty-metric, axe, console, and 360/390px overflow checks are retained.
+- **Verification is pending** until the branch workflow completes and its screenshots/a11y report are inspected. Docker runtime remains deferred by ADR-006; this task does not claim live monitoring features are implemented.
+- The GitHub metadata response reports the repository as `public` while the earlier project state records `private`; repository visibility was not changed during this task.
