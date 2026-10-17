@@ -65,7 +65,9 @@ def resolve_local_reference(root: Path, ref: str, source: Path) -> Path | None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Validate NetPulse's static GitHub Pages artifact.")
+    parser = argparse.ArgumentParser(
+        description="Validate NetPulse's static GitHub Pages artifact."
+    )
     parser.add_argument("--root", type=Path, required=True, help="Root of assembled site artifact")
     args = parser.parse_args()
     root = args.root.resolve()
@@ -127,11 +129,15 @@ def main() -> int:
         except (ET.ParseError, OSError) as exc:
             errors.append(f"Invalid SVG {svg_path.relative_to(root)}: {exc}")
 
+    source_suffixes = {".html", ".css", ".js", ".xml", ".txt", ".svg"}
     for path in root.rglob("*"):
-        if path.is_file() and path.suffix.lower() in {".html", ".css", ".js", ".xml", ".txt", ".svg"}:
+        if path.is_file() and path.suffix.lower() in source_suffixes:
             text = path.read_text(encoding="utf-8", errors="replace")
             if CANVA_REFERENCE.search(text):
-                errors.append(f"External Canva or expiring thumbnail reference found in {path.relative_to(root)}")
+                relative_path = path.relative_to(root)
+                errors.append(
+                    f"External Canva or expiring thumbnail reference found in {relative_path}"
+                )
 
     sitemap = root / "sitemap.xml"
     if sitemap.is_file():
@@ -145,7 +151,10 @@ def main() -> int:
             print(f"ERROR: {error}", file=sys.stderr)
         print(f"Site validation failed with {len(errors)} issue(s).", file=sys.stderr)
         return 1
-    print(f"Site validation passed: {len(REQUIRED_FILES)} required files, local links, translations, and SVG/XML syntax.")
+    print(
+        f"Site validation passed: {len(REQUIRED_FILES)} required files, local links, "
+        "translations, and SVG/XML syntax."
+    )
     return 0
 
 
