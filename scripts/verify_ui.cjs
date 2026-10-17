@@ -120,6 +120,33 @@ async function main() {
     const response = await desktop.goto(BASE_URL, { waitUntil: "networkidle", timeout: 30000 });
     check(response?.status() === 200, `desktop home page expected HTTP 200, got ${response?.status()}`);
     check(await desktop.locator("main h1").isVisible(), "desktop: main h1 is missing or hidden");
+
+    const visualContract = await desktop.evaluate(() => {
+      const root = getComputedStyle(document.documentElement);
+      const body = getComputedStyle(document.body);
+      const heading = document.querySelector("main h1");
+      const technicalLabel = document.querySelector(".section-kicker");
+      return {
+        critical: root.getPropertyValue("--critical").trim().toUpperCase(),
+        criticalText: root.getPropertyValue("--critical-text").trim().toUpperCase(),
+        bodyFont: body.fontFamily.toLowerCase(),
+        headingFont: (heading ? getComputedStyle(heading).fontFamily : "").toLowerCase(),
+        telemetryFont: (technicalLabel ? getComputedStyle(technicalLabel).fontFamily : "").toLowerCase(),
+        skipTarget: document.querySelector(".skip-link")?.getAttribute("href") || "",
+        plannedControls: document.querySelectorAll(".nav-item[disabled]").length,
+        setupCount: document.querySelector(".setup-number")?.textContent?.trim() || "",
+      };
+    });
+    check(visualContract.critical === "#D93A2F", `critical token changed unexpectedly: ${visualContract.critical}`);
+    check(visualContract.criticalText === "#FF8B80", `critical text token missing: ${visualContract.criticalText}`);
+    check(visualContract.bodyFont.includes("inter"), `body font is not Inter: ${visualContract.bodyFont}`);
+    check(visualContract.headingFont.includes("space") && visualContract.headingFont.includes("grotesk"),
+      `heading font is not Space Grotesk: ${visualContract.headingFont}`);
+    check(visualContract.telemetryFont.includes("ibm") && visualContract.telemetryFont.includes("plex"),
+      `technical labels are not IBM Plex Mono: ${visualContract.telemetryFont}`);
+    check(visualContract.skipTarget === "#main-content", "skip link must target the main content");
+    check(visualContract.plannedControls === 4, `expected 4 planned navigation controls, got ${visualContract.plannedControls}`);
+    check(visualContract.setupCount === "1/4", `setup progress must agree with the completed first step, got ${visualContract.setupCount}`);
     check((await desktop.locator(".metric-card__value").allTextContents()).every((value) => value.trim() === "—"),
       "foundation preview must not display fabricated monitoring metric values");
     await assertNoHorizontalOverflow(desktop, "desktop 1440px");
@@ -158,10 +185,13 @@ async function main() {
         outlineStyle: style?.outlineStyle || "none",
         outlineWidth: style?.outlineWidth || "0px",
         boxShadow: style?.boxShadow || "none",
+        className: active?.getAttribute("class") || "",
       };
     });
     check(firstFocus.tag === "A" || firstFocus.tag === "BUTTON",
       `keyboard: first Tab did not focus an interactive control (${firstFocus.tag})`);
+    check(firstFocus.className.includes("skip-link"), "keyboard: skip link must be the first focusable control");
+    check(await keyboardPage.locator(".skip-link").isVisible(), "keyboard: skip link should be visible when focused");
     check(
       (firstFocus.outlineStyle !== "none" && firstFocus.outlineWidth !== "0px") ||
         firstFocus.boxShadow !== "none",
