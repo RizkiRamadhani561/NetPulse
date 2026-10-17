@@ -54,5 +54,6 @@
   "versionPanelText": "Fondasi yang disiapkan dengan sengaja untuk alat monitoring jaringan yang ringan. Preview ini tidak menjalankan metrik palsu, pemindaian latar belakang, atau telemetry.",
   "viewRepository": "Lihat repository",
   "madeForOperators": "Dibuat untuk pengelola jaringan",
-  "footerTagline": "Kejelasan untuk setiap koneksi"
+  "footerTagline": "Kejelasan untuk setiap koneksi",
+  "skipToContent": "Lewati ke konten utama"
 }
