@@ -54,5 +54,6 @@
   "versionPanelText": "A deliberate foundation for a lightweight network-monitoring tool. No fake metrics, background scans, or telemetry are running in this preview.",
   "viewRepository": "View repository",
   "madeForOperators": "Made for network operators",
-  "footerTagline": "Clarity for every connection"
+  "footerTagline": "Clarity for every connection",
+  "skipToContent": "Skip to main content"
 }

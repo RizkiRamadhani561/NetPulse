@@ -43,3 +43,10 @@
 - **Options:** A) Keep Compose smoke on every push; B) disable Docker validation entirely; C) retain the smoke but run it manually after backend, frontend, and secret checks pass.
 - **Decision:** C. Regular CI validates code, tests, type checks, builds, audits, and secrets. The Docker Compose smoke job runs only via manual `workflow_dispatch` and depends on those checks.
 - **Consequence:** Docker testing is deferred, not waived. The Phase 0 integration gate remains open until the manual container smoke passes at the agreed final-integration point.
+
+## ADR-007 — Dashboard visual system and motion (accepted 2026-10-17)
+
+- **Context:** The Phase 0 dashboard needs a coherent visual foundation before monitoring modules are implemented; the UI must not imply live telemetry or make planned controls appear functional.
+- **Decision:** Use Space Grotesk for headings, Inter for interface copy, and IBM Plex Mono for technical labels. Keep slate surfaces and `#54D8B6` as the primary accent. Reserve `#D93A2F` for true critical/destructive states, pairing it with `#FF8B80` text when the surface requires it.
+- **Motion:** Short 140/180/260 ms transitions and a restrained entry cue; no persistent decorative animation. Respect `prefers-reduced-motion`.
+- **Interaction:** Only implemented controls look interactive. Planned modules remain disabled; preview metrics remain empty until data is real. This ADR does not mark UX-04, runtime integration, or production readiness as complete.

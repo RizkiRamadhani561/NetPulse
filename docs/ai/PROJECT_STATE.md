@@ -34,6 +34,8 @@ Last updated: 2026-10-16 (WIB)
 - Bash and PowerShell entry points call the cross-platform Python verification runner. CI now calls bash ./scripts/verify.sh --quick; --full covers the non-container toolchain and writes per-step logs/report.
 - GitHub Actions references are SHA-pinned; Gitleaks CLI is pinned to 8.30.1.
 
+- The latest dashboard UI/UX refresh from `feat/netpulse-ui-ux-refresh` is being integrated here, including the typography system, teal/slate visual tokens, reduced-motion-aware interactions, keyboard skip navigation, and Indonesian/English dashboard copy. The Phase 1 setup wizard and database/API work remain part of this branch; combined verification is required after integration.
+
 ## Latest verification snapshot
 
 - [Actions run 38852297612](https://github.com/RizkiRamadhani561/NetPulse/actions/runs/38852297612): complete, success.

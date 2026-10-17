@@ -219,3 +219,8 @@
 - Operator logs showed repeated `POST /api/v1/setup` 422 responses. Root cause: the wizard's non-submit navigation could bypass the step-2 browser constraints, then submit empty or short credentials after those inputs were unmounted.
 - The wizard now validates its retained state before moving past credentials and once more before POST, exposes a localized validation message for 422, and provides a password visibility control. Node 24 typecheck and production build passed.
 
+## 2026-10-17 — Integrate latest dashboard UI/UX into Phase 1 branch
+
+- Preserved the Phase 1 setup wizard and backend database/authentication foundation while bringing forward the latest dashboard typography, color tokens, focus/skip-link behavior, reduced-motion handling, and ID/EN copy.
+- Retained setup-wizard CSS in addition to the refreshed dashboard stylesheet so the initial setup and unavailable-API states remain styled.
+- Updated the browser audit to cover both setup error handling and the dashboard preview. Combined verification still needs to run locally/CI before treating this integration as complete.
