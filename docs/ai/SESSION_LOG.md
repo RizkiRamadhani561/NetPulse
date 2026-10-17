@@ -191,3 +191,9 @@
 - Extended the production browser check for typography/status tokens, preview-only planned navigation, setup progress, and keyboard skip navigation. Existing locale, empty-metric, axe, console, and 360/390px overflow checks are retained.
 - **Verification is pending** until the branch workflow completes and its screenshots/a11y report are inspected. Docker runtime remains deferred by ADR-006; this task does not claim live monitoring features are implemented.
 - The GitHub metadata response reports the repository as `public` while the earlier project state records `private`; repository visibility was not changed during this task.
+
+### UI PR verification follow-up — 2026-10-17
+
+- First PR CI run exposed a Ruff `I001` import-order failure in `scripts/verify_project.py`; the failure occurs in the existing repository verifier, before backend unit/type/audit stages.
+- Reordered the standard-library import block to match Ruff's reported import sorting rules. No check or lint rule was disabled.
+- Re-run of PR CI is required before the change can be considered green. The UI PR remains open; Docker runtime stays deferred under ADR-006.
