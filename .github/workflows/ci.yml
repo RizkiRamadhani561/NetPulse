@@ -141,6 +141,7 @@ jobs:
           "$tool_dir/node_modules/.bin/playwright" install --with-deps chromium
 
       - name: Browser, keyboard, responsive, and accessibility checks
+        timeout-minutes: 8
         run: node scripts/verify_ui.cjs
         env:
           NODE_PATH: ${{ runner.temp }}/netpulse-ui-tools/node_modules

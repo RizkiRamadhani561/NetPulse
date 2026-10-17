@@ -50,6 +50,7 @@ export function DashboardShell() {
 
   return (
     <div className="app-shell" id="overview">
+      <a className="skip-link" href="#main-content">{copy.skipToContent}</a>
       <aside className="sidebar" aria-label={copy.primaryNavigation}>
         <a className="brand" href="#overview" aria-label="NetPulse home">
           <PulseMark />
@@ -62,7 +63,6 @@ export function DashboardShell() {
         <div className="workspace-switcher">
           <span className="workspace-avatar">N</span>
           <span className="workspace-copy"><strong>{copy.workspace}</strong><small>{copy.localWorkspace}</small></span>
-          <span className="switcher-chevron" aria-hidden="true">⌄</span>
         </div>
 
         <p className="sidebar-label">{copy.workspaceSection}</p>
@@ -92,7 +92,7 @@ export function DashboardShell() {
         <div className="sidebar-footer"><span className="online-dot" />{copy.localPreview}<span className="version-label">v0.1.0</span></div>
       </aside>
 
-      <main className="main-panel">
+      <main className="main-panel" id="main-content" tabIndex={-1}>
         <header className="topbar">
           <div className="breadcrumb"><span>{copy.workspace}</span><span className="breadcrumb-slash">/</span><strong>{copy.overview}</strong></div>
           <div className="topbar-actions">
@@ -101,7 +101,7 @@ export function DashboardShell() {
             <button className="language-toggle" type="button" onClick={() => setLanguage(language === "id" ? "en" : "id")} aria-label={copy.switchLanguage}>
               <span className="language-icon" aria-hidden="true">文</span>{language === "id" ? "ID" : "EN"}<span className="switcher-chevron" aria-hidden="true">⌄</span>
             </button>
-            <div className="avatar" aria-label={copy.localPreview} title={copy.localPreview}>N</div>
+            <span className="avatar" aria-hidden="true">N</span>
           </div>
         </header>
 
@@ -126,7 +126,7 @@ export function DashboardShell() {
             <article className="panel panel--wide">
               <div className="panel-heading">
                 <div><p className="section-kicker">01 / {copy.networkHealth}</p><h2>{copy.activityTitle}</h2><p className="panel-caption">{copy.activitySubtitle}</p></div>
-                <span className="period-chip">{copy.last24Hours}<span aria-hidden="true">⌄</span></span>
+                <span className="period-chip">{copy.last24Hours}</span>
               </div>
               <div className="empty-graph" role="img" aria-label={copy.emptyGraphLabel}>
                 <div className="graph-gridline graph-gridline--one" /><div className="graph-gridline graph-gridline--two" /><div className="graph-gridline graph-gridline--three" />
@@ -137,7 +137,7 @@ export function DashboardShell() {
             </article>
 
             <article className="panel setup-panel">
-              <div className="panel-heading panel-heading--compact"><div><p className="section-kicker">02 / {copy.gettingStarted}</p><h2>{copy.setupTitle}</h2></div><span className="setup-number">0/4</span></div>
+              <div className="panel-heading panel-heading--compact"><div><p className="section-kicker">02 / {copy.gettingStarted}</p><h2>{copy.setupTitle}</h2></div><span className="setup-number">1/4</span></div>
               <p className="panel-caption setup-caption">{copy.setupSubtitle}</p>
               <ol className="setup-list">
                 <li className="setup-step setup-step--current"><span className="step-index">01</span><span className="step-copy"><strong>{copy.foundationStep}</strong><small>{copy.foundationStepStatus}</small></span><span className="step-check">✓</span></li>
