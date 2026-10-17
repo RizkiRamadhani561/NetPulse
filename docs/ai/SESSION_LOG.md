@@ -182,3 +182,14 @@
 - Ran frontend typecheck: passed.
 - Pushed updated `main` branch to GitHub remote `origin/main`.
 
+
+
+## 2026-10-17 (WIB) — Brand assets and static project site
+
+- Added canonical repository-owned SVG assets: primary/alternate marks, horizontal wordmark, favicon, topology pattern, login background artwork, and repository banner under `frontend/public/brand/`.
+- Replaced the dashboard's inline pulse mark with the canonical asset and wired the favicon/theme metadata. Added reserved CSS helpers for a future login screen; no login route or nonfunctional form was added because authentication is not implemented in Phase 0.
+- Added `docs/BRAND_GUIDELINES.md`, a responsive static landing page, an overview of project docs, dark/light theme and ID/EN copy switching, and a GitHub Pages workflow.
+- Added the banner, public site, and brand guide links to the English and Indonesian README files.
+- Provenance note: Canva surfaced only 200px watermarked, expiring thumbnails through the connected interface. Those were not committed. The repo SVGs are hand-authored vector assets in the same art direction, not claimed exports of the original Canva generations.
+- Verification: no local build/browser run was available from the GitHub-only edit session. The branch remains unverified until CI and visual/accessibility review report results. Docker Compose runtime validation and the independent review remain deferred/open.
+- Next: validate the file tree and diff, check the workflow and app metadata, open a PR against `main`, then review required checks. Enable GitHub Pages source as GitHub Actions in repository Settings before deployment.
