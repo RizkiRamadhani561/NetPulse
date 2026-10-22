@@ -19,7 +19,7 @@ classifiers = [
 dependencies = [
   "fastapi==0.143.2",
   "uvicorn[standard]>=0.35,<1.0",
-  "sqlalchemy==2.1.4",
+  "sqlalchemy==2.1.5",
 ]
 
 [project.optional-dependencies]
